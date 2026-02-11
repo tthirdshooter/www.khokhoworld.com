@@ -3,62 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kho Kho World Cup | KhoKhoWorld</title>
-    <link rel="stylesheet" href="style.css"> 
+    <title>World Cup Data | KhoKhoWorld</title>
+    <style>
+        :root {
+            --primary: #ff6600;
+            --secondary: #1a1a1a;
+            --light: #f9f9f9;
+            --white: #ffffff;
+            --border: #dddddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--light);
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--secondary);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Header */
+        .wc-header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* Data Cards & Tables */
+        .data-section {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th {
+            background-color: var(--secondary);
+            color: white;
+            text-align: left;
+            padding: 12px;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        table tr:hover {
+            background-color: #fff5ee;
+        }
+
+        .status-win { color: green; font-weight: bold; }
+        
+        .grid-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-card {
+            padding: 20px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            color: var(--primary);
+            display: block;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: var(--secondary);
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1 class="hero-title">KhoKhoWorld</h1>
-        <p class="hero-subtitle">Kho Kho World Cup</p>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="leagues.html">Leagues</a></li>
-            <li><a href="players.html">Players</a></li>
-            <li><a href="worldcup.html" class="active">Kho Kho World Cup</a></li>
-            <li><a href="rules.html">Rules & History</a></li>
-            <li><a href="news.html">News</a></li>
-        </ul>
-    </nav>
 
-    <div class="container">
-        <section class="content-card">
-            <h2>The Global Stage: Kho Kho World Cup</h2>
-            <p>Welcome to the ultimate hub for the Kho Kho World Cup! Here you'll find everything you need to follow the world's premier Kho Kho tournament.</p>
-            
-            <h3>Past Winners</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Host Nation</th>
-                        <th>Winner</th>
-                        <th>Runner-up</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2019</td>
-                        <td>India</td>
-                        <td>India</td>
-                        <td>Nepal</td>
-                    </tr>
-                    </tbody>
-            </table>
+<nav>
+    <a href="#" class="logo">KHOKHOWORLD</a>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Leagues</a></li>
+        <li><a href="#">Players</a></li>
+        <li><a href="#">Updates</a></li>
+    </ul>
+</nav>
 
-            <h3>Upcoming Matches</h3>
-            <p>[Details about upcoming World Cup matches or next tournament dates]</p>
+<header class="wc-header">
+    <h1>Kho Kho World Cup Central</h1>
+    <p>Comprehensive Data, Stats, and History of Global Excellence</p>
+</header>
 
-            <h3>Teams & Players</h3>
-            <p>Explore the national teams competing for glory and their star players.</p>
-            <p><a href="players.html" class="button">See All Players</a></p>
+<div class="container">
+    
+    <section class="data-section">
+        <h2>Tournament Fast Facts</h2>
+        <div class="grid-stats">
+            <div class="stat-card">
+                <span class="stat-number">16</span>
+                <span>Participating Nations</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">48</span>
+                <span>Total Matches</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">2026</span>
+                <span>Current Season</span>
+            </div>
+        </div>
+    </section>
 
-            </section>
-    </div>
+    
+    <section class="data-section">
+        <h2>Group Stage Points Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>Played</th>
+                    <th>Won</th>
+                    <th>Lost</th>
+                    <th>Points</th>
+                    <th>Net Run Rate (NRR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><strong>India</strong></td>
+                    <td>5</td>
+                    <td>5</td>
+                    <td>0</td>
+                    <td>15</td>
+                    <td>+3.450</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>South Africa</strong></td>
+                    <td>5</td>
+                    <td>4</td>
+                    <td>1</td>
+                    <td>12</td>
+                    <td>+1.210</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>England</strong></td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>2</td>
+                    <td>9</td>
+                    <td>-0.150</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 
-    <footer>
-        <p>&copy; 2026 KhoKhoWorld. All Rights Reserved.</p>
-    </footer>
+    <section class="data-section">
+        <h2>Recent Match Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Match ID</th>
+                    <th>Matchup</th>
+                    <th>Venue</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>M-42</td>
+                    <td>India vs Nepal</td>
+                    <td>New Delhi</td>
+                    <td><span class="status-win">India won by an innings</span></td>
+                </tr>
+                <tr>
+                    <td>M-41</td>
+                    <td>Sri Lanka vs UAE</td>
+                    <td>Mumbai</td>
+                    <td><span class="status-win">Sri Lanka won by 4 points</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="data-section">
+        <h2>World Cup Hall of Fame</h2>
+        <p>A look back at the champions of the world stage.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Host</th>
+                    <th>Champion</th>
+                    <th>Runner Up</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2026</td>
+                    <td>India</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                </tr>
+                <tr>
+                    <td>2023</td>
+                    <td>South Africa</td>
+                    <td>India</td>
+                    <td>South Africa</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 KhoKhoWorld. All Rights Reserved. Follow the chase.</p>
+</footer>
+
 </body>
 </html>
