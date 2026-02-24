@@ -3,236 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rules & History | KhoKhoWorld</title>
+    <title>The Evolution of Kho-Kho</title>
     <style>
-        :root {
-            --primary: #ff6600;
-            --secondary: #1a1a1a;
-            --accent: #f4f4f4;
-            --white: #ffffff;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.7;
-            margin: 0;
-            background-color: var(--accent);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
             color: #333;
-        }
-
-        header {
-            background: var(--secondary);
-            color: var(--white);
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 6px solid var(--primary);
-        }
-
-        nav {
-            background: #fff;
-            padding: 15px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            box-shadow: var(--shadow);
-            z-index: 100;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--secondary);
-            font-weight: bold;
-            margin: 0 20px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
-        nav a:hover {
-            color: var(--primary);
-        }
-
-        .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 40px auto;
             padding: 0 20px;
+            background-color: #f4f7f6;
         }
-
-        /* History Section Styles */
-        .history-card {
-            background: var(--white);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            margin-bottom: 40px;
-        }
-
-        .timeline {
-            border-left: 3px solid var(--primary);
-            padding-left: 20px;
-            margin-left: 10px;
-        }
-
-        .timeline-item {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -27px;
-            top: 5px;
-            width: 12px;
-            height: 12px;
-            background: var(--primary);
-            border-radius: 50%;
-        }
-
-        .year {
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-
-        /* Rules Section Styles */
-        .rules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .rule-box {
-            background: var(--white);
-            padding: 25px;
-            border-radius: 8px;
-            border-top: 4px solid var(--primary);
-            box-shadow: var(--shadow);
-        }
-
-        .rule-box h3 {
-            margin-top: 0;
-            color: var(--secondary);
-            display: flex;
-            align-items: center;
-        }
-
-        .icon {
-            margin-right: 10px;
-            font-size: 1.5rem;
-        }
-
-        h2 {
-            font-size: 2.2rem;
+        header {
             text-align: center;
-            color: var(--secondary);
+            border-bottom: 3px solid #2c3e50;
             margin-bottom: 30px;
         }
-
-        .court-dim {
-            background: var(--secondary);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 20px;
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
-
-        footer {
-            background: var(--secondary);
+        h2 {
+            color: #e67e22;
+            border-left: 5px solid #e67e22;
+            padding-left: 15px;
+            margin-top: 40px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        li strong {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2c3e50;
             color: white;
-            text-align: center;
-            padding: 30px;
-            margin-top: 60px;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #d35400;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>The Heritage & Logic of Kho Kho</h1>
-    <p>From Ancient Sanskrit roots to Modern Professional Mats</p>
-</header>
+    <header>
+        <h1>The Evolution of Kho-Kho</h1>
+        <p><em>A Historical Timeline of India's Traditional Sport</em></p>
+    </header>
 
-<nav>
-    <a href="index.html">Main Home</a>
-    <a href="#history">History</a>
-    <a href="#rules">Rules</a>
-    <a href="#equipment">Field Specs</a>
-</nav>
-
-<div class="container">
-    
-    <section id="history" class="history-card">
-        <h2>History of the Game</h2>
-        <p>Kho Kho is one of the oldest traditional tag sports in India. Its origins are difficult to trace, but many believe it is a modified form of <strong>'Run Chase'</strong>, which in its ancient form was played on chariots called <em>Rathera</em>.</p>
-        
-        <div class="timeline">
-            <div class="timeline-item">
-                <span class="year">Ancient India</span>
-                <p>Mentions of sports similar to Kho Kho found in the Mahabharata, specifically the 'Chakravyuha' tactics which mirror the defensive patterns used today.</p>
-            </div>
-            <div class="timeline-item">
-                <span class="year">1914</span>
-                <p>The first set of modern Kho Kho rules was framed by the Deccan Gymkhana Club of Pune.</p>
-            </div>
-            <div class="timeline-item">
-                <span class="year">1959</span>
-                <p>The Kho Kho Federation of India (KKFI) was formed, and the first National Championship was held in Vijayawada.</p>
-            </div>
-            <div class="timeline-item">
-                <span class="year">1987</span>
-                <p>Kho Kho was included as a demonstration sport in the SAF Games in Kolkata.</p>
-            </div>
-            <div class="timeline-item">
-                <span class="year">2022-Present</span>
-                <p>The launch of <strong>Ultimate Kho Kho</strong> brought the sport to the professional mat with league-based formats and television broadcasting.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="rules">
-        <h2>Official Rules of Play</h2>
-        <div class="rules-grid">
-            <div class="rule-box">
-                <h3><span class="icon">👥</span>Teams</h3>
-                <p>Each team consists of 12 players, but only 9 players take the field. 3 players enter as defenders in "batches".</p>
-            </div>
-            <div class="rule-box">
-                <h3><span class="icon">⏳</span>Duration</h3>
-                <p>A match consists of two innings. Each innings has 9 minutes of chasing and 9 minutes of defending for each team.</p>
-            </div>
-            <div class="rule-box">
-                <h3><span class="icon">👉</span>The 'Kho'</h3>
-                <p>The chaser must touch a seated teammate on the back and shout "KHO" loudly to change active chasers.</p>
-            </div>
-            <div class="rule-box">
-                <h3><span class="icon">🚫</span>Fouls</h3>
-                <p>Chasers cannot cross the central lane or change direction once they have started moving toward a pole (Directional Foul).</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="equipment" style="margin-top: 40px;">
-        <h2>Field Specifications</h2>
-        <div class="history-card">
-            <p>Modern Kho Kho is played on a rectangular court, traditionally mud but now high-quality synthetic mats in professional leagues.</p>
-            <div class="court-dim">
-                <strong>Standard Dimensions:</strong> 27 Meters (Length) x 16 Meters (Width)
-            </div>
-            <ul style="margin-top: 20px;">
-                <li><strong>Free Zone:</strong> The area outside the poles (1.5m x 16m).</li>
-                <li><strong>Poles:</strong> Two strong wooden/fiber posts fixed at the ends of the central lane.</li>
-                <li><strong>Sitting Blocks:</strong> 8 squares in the central lane where chasers sit facing opposite directions.</li>
-            </ul>
-        </div>
-    </section>
-
-</div>
-
-<footer>
-    <p>&copy; 2026 KhoKhoWorld - Spreading the Spirit of the Chase.</p>
-</footer>
-
-</body>
-</html>
+    <section>
+        <h2>The Early Foundations (1914 – 1945)</h2>
+        <ul>
+            <li><strong>1914:</strong> The formal journey began at the Deccan Gymkhana Club in Pune.
