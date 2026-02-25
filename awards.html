@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kho-Kho Awards & Honors</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e67e22;
+            --accent: #27ae60;
+            --light-bg: #f4f7f6;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-bg);
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+        }
+        h2 {
+            color: var(--primary);
+            background: #ecf0f1;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 40px;
+        }
+        
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: var(--primary);
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        tr:hover { background-color: #f9f9f9; }
+        .year-col { font-weight: bold; color: var(--secondary); width: 15%; }
+
+        /* Special Awards Cards */
+        .award-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .award-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fff;
+            border-top: 5px solid var(--accent);
+        }
+        .award-card h3 { margin-top: 0; color: var(--accent); }
+        
+        /* Championship List */
+        .kkfi-list {
+            list-style: none;
+            padding: 0;
+        }
+        .kkfi-list li {
+            padding: 10px;
+            border-bottom: 1px dashed #ccc;
+            display: flex;
+            justify-content: space-between;
+        }
+        .kkfi-list li span.award-name {
+            font-weight: bold;
+            color: #c0392b;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            th, td { font-size: 0.85rem; padding: 8px; }
+            .kkfi-list li { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Kho-Kho Excellence Awards</h1>
+
+    <h2><span style="color:var(--secondary)">🏆</span> Arjuna Award Recipients</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Recipient Name</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="year-col">1970</td><td>Shri Sudhir Parab</td><td>Gujarat</td></tr>
+            <tr><td class="year-col">1971</td><td>Kumari Achala Suberao Devra</td><td>Gujarat</td></tr>
+            <tr><td class="year-col">1973</td><td>Kumari Bhavana H. Parekh</td><td>Gujarat</td></tr>
+            <tr><td class="year-col">1974</td><td>Kumari N. C. Sarolkar</td><td>Madhya Pradesh</td></tr>
+            <tr><td class="year-col">1975</td><td>Kumari Usha Vasant Nagarkar</td><td>Maharashtra</td></tr>
+            <tr><td class="year-col">1975</td><td>Shri Shreerng J. Inamdar</td><td>Maharashtra</td></tr>
+            <tr><td class="year-col">1976</td><td>Shri Shekhar R. Dharwadkar</td><td>Maharashtra</td></tr>
+            <tr><td class="year-col">1981</td><td>Kumari Sushma Sarolkar</td><td>Madhya Pradesh</td></tr>
+            <tr><td class="year-col">1981</td><td>Shri Hemant M. Takalkar</td><td>Maharashtra</td></tr>
+            <tr><td class="year-col">1983</td><td>Kumari Veena Narayan Parab</td><td>Maharashtra</td></tr>
+            <tr><td class="year-col">1984</td><td>Shri S. Prakash</td><td>Karnataka</td></tr>
+            <tr><td class="year-col">1985</td><td>Kumari S. B. Kulkarni</td><td>Maharashtra</td></tr>
+            <tr><td class="year-col">1998</td><td>Kumari Shoba Narayan</td><td>Karnataka</td></tr>
+            <tr><td class="year-col">2020</td><td>Kumari Sarita Kale</td><td>Maharashtra</td></tr>
+            <tr><td class="year-col">2023</td><td>Kumari Nasreen Sheikh</td><td>Delhi</td></tr>
+        </tbody>
+    </table>
+
+    <div class="award-grid">
+        <div class="award-card">
+            <h3>Dronacharya Award</h3>
+            <p><strong>2000:</strong> Shree Gopal Purushottam Phadke</p>
+        </div>
+        <div class="award-card" style="border-top-color: #9b59b6;">
+            <h3>Padma Shri Award</h3>
+            <p><strong>2003:</strong> Shree Gopal Purushottam Phadke</p>
+        </div>
+    </div>
+
+    <h2>KKFI National Championship Awards</h2>
+    <ul class="kkfi-list">
+        <li><span>Men</span> <span class="award-name">Eklavya Award (1963-64)</span></li>
+        <li><span>Women</span> <span class="award-name">Rani Lakshmibai Award (1963-64)</span></li>
+        <li><span>Junior Boys</span> <span class="award-name">Veer Abhimanyu Award (1970-71)</span></li>
+        <li><span>Junior Girls</span> <span class="award-name">Janki Award (1974-75)</span></li>
+        <li><span>Sub Junior Boys</span> <span class="award-name">Bharat Award (1980-81)</span></li>
+        <li><span>Sub Junior Girls</span> <span class="award-name">Ela Award (1980-81)</span></li>
+    </ul>
+</div>
+
+<div style="text-align: center; margin-top: 20px; color: #7f8c8d; font-size: 0.8rem;">
+    &copy; 2026 Kho-Kho Federation Information Page
+</div>
+
+</body>
+</html>
