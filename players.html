@@ -254,7 +254,126 @@
     </article>   
 
 
+<style>
+    /* Container for the player card */
+    .player-card {
+        display: flex;
+        flex-direction: row;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+        max-width: 600px; /* Limits the overall width of the card */
+        margin: 20px auto;
+        border: 1px solid #ddd;
+    }
 
+    /* Fixed size for the image container */
+    .player-image {
+        position: relative;
+        width: 200px; /* Set a fixed width */
+        min-width: 200px;
+        height: 250px; /* Set a fixed height */
+        background-color: #f0f0f0;
+    }
+
+    /* Force the image to fit perfectly inside the container */
+    .player-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* This crops the image to fill the box without stretching */
+        display: block;
+    }
+
+    /* Badge styling */
+    .role-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #ff6600;
+        color: white;
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        border-radius: 4px;
+        z-index: 2;
+    }
+
+    /* Info section styling */
+    .player-info {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .player-info h3 {
+        margin: 0 0 10px 0;
+        color: #1a1a1a;
+        font-size: 1.5rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .stat-item {
+        font-size: 0.85rem;
+        color: #666;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 4px;
+    }
+
+    .stat-item span {
+        display: block;
+        color: #ff6600;
+        font-weight: bold;
+    }
+
+    .view-bio {
+        display: inline-block;
+        background: #1a1a1a;
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+        text-align: center;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .view-bio:hover {
+        background: #ff6600;
+    }
+
+    /* Mobile Responsive: Stacks image on top of text */
+    @media (max-width: 480px) {
+        .player-card { flex-direction: column; }
+        .player-image { width: 100%; height: 300px; }
+    }
+</style>
+
+<article class="player-card">
+    <div class="player-image">
+        <span class="role-badge">ATTACKER</span>
+        <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/pkj.jpeg" alt="Pankaj Malhotra">
+    </div>
+    <div class="player-info">
+        <h3>Pankaj Malhotra</h3>
+        <p style="margin-top:0; font-weight:bold; color:#555;">Team: India National Team</p>
+        <div class="stats-grid">
+            <div class="stat-item">Award <span>Veer Jija Bhai Awardee</span></div>
+            <div class="stat-item">Award <span>Prof Chaman Lal Khel Ratna</span></div>
+            <div class="stat-item">Honor <span>Top Player by Khelo India 2000</span></div>
+            <div class="stat-item">Role <span>Lead Attacker</span></div>
+        </div>
+        <a href="pankajmalhotra.html" class="view-bio">READ FULL BIOGRAPHY</a>
+    </div>
+</article>
 
     
          <article class="player-card">
@@ -310,6 +429,7 @@
 </body>
 
 </html>
+
 
 
 
