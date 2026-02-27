@@ -58,8 +58,63 @@
             font-size: 0.9rem;
             color: #7f8c8d;
         }
+
+/* Container for the image/table */
+.watermark-container {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+/* The actual watermark layer */
+.watermark-container::before {
+    content: "www.khokhoworld.com";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150%;
+    height: 150%;
+    
+    /* Styling the text */
+    font-size: 3rem;
+    color: rgba(0, 0, 0, 0.05); /* Very light grey so it doesn't block text */
+    font-weight: bold;
+    text-transform: uppercase;
+    
+    /* Rotating and repeating the text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-45deg);
+    pointer-events: none; /* Allows users to still click the image underneath */
+    z-index: 1; 
+}
+
+.watermark-container img {
+    display: block;
+    position: relative;
+    z-index: 2; /* Keeps the image on top */
+    opacity: 0.9; /* Making image slightly transparent lets watermark show through */
+}
+
+        
     </style>
 </head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 <body>
 
     <header>
@@ -145,6 +200,11 @@ Arena. The information regarding the format will be shared though circular prior
 
   <div style="position: relative; display: inline-block;">
   <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/comp.jpg" oncontextmenu="return false;" draggable="false"
+
+
+      <div class="watermark-container">
+    <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/comp.jpg" alt="Kho Kho Measurement Comparison" style="width:100%;">
+</div>
      style="width: 100%; height: 100%; object-fit: cover; display: block;">
       <div style="position: absolute; top: 0; left: 0; width: 40%; height: 30%;"></div>
     <C><strong>8 vs 6 Block</strong> </C>   
@@ -159,6 +219,7 @@ Arena. The information regarding the format will be shared though circular prior
 
      
     </div>
+
 
 
 
