@@ -4,55 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KhoKhoWorld | All About Kho Kho</title>
-
-/* Basic styling to make it look like a nav bar */
-.navbar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  background-color: #333;
-}
-
-.navbar li {
-  display: inline-block;
-  position: relative; /* Crucial for positioning the submenu */
-}
-
-.navbar a {
-  display: block;
-  padding: 15px 20px;
-  color: white;
-  text-decoration: none;
-}
-
-.navbar a:hover {
-  background-color: #444;
-}
-
-/* --- Submenu Logic --- */
-
-/* 1. Hide the submenu by default */
-.submenu {
-  display: none;
-  position: absolute; /* Keeps it from pushing other menu items aside */
-  top: 100%; /* Positions it directly below the parent */
-  left: 0;
-  min-width: 150px;
-  background-color: #444;
-}
-
-/* 2. Make submenu items stack vertically */
-.submenu li {
-  display: block;
-}
-
-/* 3. Show the submenu when hovering over the parent 'li' */
-.has-submenu:hover .submenu {
-  display: block;
-}
-
-
-    
     <style>
         :root {
             --primary: #ff6600;
@@ -62,196 +13,29 @@
             --light-grey: #e0e0e0;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.8;
-            margin: 0;
-            color: var(--text);
-            background-color: var(--accent);
-        }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.8; margin: 0; color: var(--text); background-color: var(--accent); }
+        header { background: var(--secondary); color: white; padding: 2rem 1rem; text-align: center; border-bottom: 5px solid var(--primary); }
+        
+        /* Navigation Styles */
+        nav { background: var(--primary); padding: 0.8rem 0; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        nav ul { list-style: none; padding: 0; margin: 0; display: flex; justify-content: center; flex-wrap: wrap; }
+        nav li { position: relative; margin: 0 15px; }
+        nav a { color: white; text-decoration: none; font-weight: bold; padding: 10px 15px; display: block; }
+        nav a:hover { background-color: rgba(255, 255, 255, 0.2); border-radius: 5px; }
 
-        header {
-            background: var(--secondary);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            border-bottom: 5px solid var(--primary);
-        }
+        /* Submenu Logic */
+        .submenu { display: none; position: absolute; top: 100%; left: 0; min-width: 250px; background-color: #444; z-index: 1000; text-align: left; }
+        .submenu li { margin: 0; display: block; }
+        .has-submenu:hover .submenu { display: block; }
 
-        nav {
-            background: var(--primary);
-            padding: 0.8rem 0;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap; /* Allows links to wrap on smaller screens */
-        }
-
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        nav ul li a:hover,
-        nav ul li a.active {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 20px;
-        }
-
-        .hero-title {
-            font-size: 3rem;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .hero-subtitle {
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.3rem;
-            margin-top: 5px;
-        }
-
-        .content-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 2rem;
-        }
-
-        .feature-box {
-            background: var(--secondary);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            text-align: center;
-            position: relative;
-            overflow: hidden; /* For image overlay */
-        }
-
-        .feature-box:hover {
-            transform: translateY(-8px);
-            background: var(--primary);
-        }
-
-        .feature-box img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            filter: brightness(0.8); /* Slightly dim the image */
-            transition: filter 0.3s ease;
-        }
-
-        .feature-box:hover img {
-            filter: brightness(1); /* Brighten image on hover */
-        }
-
-        .feature-box h3 {
-            margin-top: 0.5rem;
-            font-size: 1.5rem;
-            color: var(--primary);
-            transition: color 0.3s ease;
-        }
-
-        .feature-box:hover h3 {
-            color: white;
-        }
-
-        .feature-box p {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: var(--light-grey);
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-box a.button {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .feature-box a.button:hover {
-            background-color: #e65c00; /* Slightly darker orange */
-        }
-
-        h2 {
-            color: var(--secondary);
-            border-left: 5px solid var(--primary);
-            padding-left: 10px;
-            margin-top: 3rem;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2.5rem;
-            background: var(--secondary);
-            color: white;
-            margin-top: 4rem;
-            border-top: 5px solid var(--primary);
-        }
-
-        .highlight {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-            nav ul li {
-                margin: 5px 10px;
-            }
-            .grid {
-                grid-template-columns: 1fr; /* Stack boxes on small screens */
-            }
-            .content-card {
-                padding: 1.5rem;
-            }
-        }
+        /* Other Styles */
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 20px; }
+        .content-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 2rem; }
+        .feature-box { background: var(--secondary); color: white; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .feature-box img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; }
+        .button { display: inline-block; background: var(--primary); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; }
+        footer { text-align: center; padding: 2.5rem; background: var(--secondary); color: white; margin-top: 4rem; border-top: 5px solid var(--primary); }
     </style>
 </head>
 <body>
@@ -261,130 +45,38 @@
     <p class="hero-subtitle">Leagues, Players, & Updates</p>
 </header>
 
-
-<nav class="navbar">
-  <ul class="main-menu">
-    <li><a href="#">Home</a></li>
-     <li><a href="index.html" class="active">Home</a></li>
+<nav>
+    <ul class="main-menu">
+        <li><a href="index.html">Home</a></li>
         <li><a href="league.html">Leagues</a></li>
         <li><a href="players.html">Players</a></li>
-        <li><a href="worldcup.html">Kho Kho World Cup</a></li>
-        <li><a href="rule.html"> History</a></li>
-  <li class="has-submenu">
-      <a href="#">Rules & Regulation ▼</a>
-      <ul class="submenu">
-     <li><a href="aboutground.html">About Ground</a></li>
-        <li><a href="#">Rule of the Game</a></li>
-          <li><a href="#">Rule About Matches</a></li> 
-            <li><a href="#">Technical Officials /Refree Duties</a></li> 
-  <li><a href="#">Rules about Players/Managers/Coaches</a></li> 
-           <li><a href="#">Scoring in Kho-Kho</a></li> 
-            <li><a href="#">Signals in Kho-Kho</a></li> 
-            <li><a href="#">Scoring System</a></li> 
-        
-        
+        <li class="has-submenu">
+            <a href="#">Rules & Regulation ▼</a>
+            <ul class="submenu">
+                <li><a href="aboutground.html">About Ground</a></li>
+                <li><a href="#">Rule of the Game</a></li>
+                <li><a href="#">Technical Officials</a></li>
+                <li><a href="#">Scoring System</a></li>
+            </ul>
+        </li>
         <li><a href="news.html">News</a></li>
-        <li><a href="awards.html">Awards</a></li>
         <li><a href="f.html">Contact Us</a></li>
-  
-    
-    <li><a href="#">About</a></li>
-    <li><a href="#">Contact</a></li>
-  </ul>
+    </ul>
 </nav>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
 
 <div class="container">
     <section class="content-card">
         <h2>Welcome to the Arena</h2>
-        <p>
-            <span class="highlight">KhoKhoWorld</span> is your complete destination — From major leagues, 
-            <strong>Kho Kho World Cup</strong>, and breaking news to legendary players, rising talents, 
-            Kho Kho rules, and the history of the sport.
-        </p>
-        <p>
-            If you are following professional Kho Kho leagues in India, you will find 
-            accurate, in-depth coverage all in one place.
-        </p>
+        <p>Explore the world of Kho Kho, from rules to major league updates.</p>
     </section>
-
-    <h2 class="section-title">Explore Kho Kho</h2>
+    
     <div class="grid">
-        <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/toss.jpg" alt="toss">
-            <h3> Major Leagues</h3>
-            <p>Dive into the intensity of Ultimate Kho Kho (UKK) and other top domestic championships. Get real-time scores, team stats, and expert analysis.</p>
-            <a href="league.html" class="button">View Leagues</a>
         </div>
-        
-        <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/ukk.jpg" alt="ukk">
-            <h3>Kho Kho World Cup</h3>
-            <p>Follow the pinnacle of international Kho Kho. Access historical data, tournament brackets, team profiles, and exclusive match highlights.</p>
-            <a href="worldcup.html" class="button">World Cup Data</a>
-        </div>
-   
-        <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/kho.jpg" alt="kho">
-            <h3> Legendary Players</h3>
-            <p>Discover the heroes of Kho Kho! Explore detailed player profiles, career statistics, and memorable moments from the legends and rising stars.</p>
-            <a href="players.html" class="button">Meet Players</a>
-        </div>
-
-        <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/history.jpg" alt="history">
-            <h3>Rules & History</h3>
-            <p>Master the strategic nuances of Kho Kho with our comprehensive guide to official rules, and journey through the rich history of this ancient sport.</p>
-            <a href="rule.html" class="button">Learn More</a>
-        </div>
-   <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/cmn.jpg" alt="cmn">
-            <h3>Common Wealth Championship</h3>
-            <p>16 Nations one CUP Coming Soon.</p>
-            <a href="rules.html" class="button">Learn More</a>
-        </div>
-
-
-
-
-
-
-
-
-        
-    </div>
-
-    <section class="content-card" style="margin-top: 3rem;">
-        <h2>Latest News & Updates</h2>
-        <p>Stay on top of all the action with our breaking news section. From transfer rumors to match reports, KhoKhoWorld keeps you informed.</p>
-        <p>
-            <a href="news.html" class="button" style="background-color: var(--secondary);">Read All News</a>
-        </p>
-    </section>
-
 </div>
 
 <footer>
-    <p>&copy; 2026 KhoKhoWorld. All Rights Reserved. | <a href="#" style="color: white;">Privacy Policy</a></p>
+    <p>&copy; 2026 KhoKhoWorld. All Rights Reserved.</p>
 </footer>
-
-</body>
-</html>
 
 </body>
 </html>
