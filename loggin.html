@@ -5,12 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firebase Auth Page</title>
     <style>
-        /* Basic styling to make the login-card look good */
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f7f6; }
-        .login-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        button:hover { opacity: 0.9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f7f6; margin: 0; }
+        .login-card { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        h2 { margin-bottom: 1.5rem; color: #333; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        
+        /* Button & Loading Styles */
+        button { 
+            width: 100%; padding: 12px; background: #4285f4; color: white; border: none; 
+            border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px;
+            display: flex; justify-content: center; align-items: center; transition: background 0.3s;
+        }
+        button:hover { background: #357ae8; }
+        button:disabled { background: #a5c2f1; cursor: not-allowed; }
+
+        .spinner {
+            display: none; width: 16px; height: 16px; border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .is-loading .btn-text { display: none; }
+        .is-loading .spinner { display: inline-block; }
+
+        /* Error Message Styles */
+        #message { 
+            min-height: 20px; margin-top: 15px; font-size: 0.85rem; border-radius: 4px; transition: all 0.3s ease; 
+        }
+        .error-active { 
+            background-color: #ffebee; color: #c62828; padding: 10px; border: 1px solid #ef9a9a; 
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
     </style>
 </head>
 <body>
@@ -20,50 +46,46 @@
         <input type="email" id="email" placeholder="Email" required>
         <input type="password" id="password" placeholder="Password" required>
         
-        <button id="mainBtn">Sign In</button>
+        <button id="mainBtn">
+            <span class="btn-text">Sign In</span>
+            <span class="spinner"></span>
+        </button>
         
         <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
         
-        <button id="googleBtn" style="background: white; color: #757575; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center;">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="margin-right: 10px;">
-            Continue with Google
+        <button id="googleBtn" style="background: white; color: #757575; border: 1px solid #ddd;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="margin-right: 10px;" id="googleIcon">
+            <span class="btn-text">Continue with Google</span>
+            <span class="spinner" style="border-top-color: #4285f4;"></span>
         </button>
 
         <p id="toggleMsg" style="font-size: 0.8rem; margin-top: 15px; cursor: pointer; color: #4285f4;">
             Don't have an account? <b>Sign Up</b>
         </p>
-        <p id="message" style="color: red; font-size: 0.8rem;"></p>
+        <div id="message"></div>
     </div>
 
     <script type="module">
-        // 1. Import the functions you need from the SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword, 
-            signInWithPopup, 
-            GoogleAuthProvider 
+            getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
+            signInWithPopup, GoogleAuthProvider, onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // 2. YOUR CONFIG HERE 
-        // Replace the placeholders with your actual keys from the Firebase Console!
         const firebaseConfig = {
             apiKey: "AIzaSyBVFZ6EnTiIrDYzAVseMKpD3o7lQgZ1D3E",
-        authDomain: "login-abad1.firebaseapp.com",
-         projectId: "login-abad1",
-     storageBucket: "login-abad1.firebasestorage.app",
-  messagingSenderId: "5117210651",
-  appId: "1:5117210651:web:f76527eb00d42ba2bac8be",
-      measurementId: "G-JN5BLFMTK1"
+            authDomain: "login-abad1.firebaseapp.com",
+            projectId: "login-abad1",
+            storageBucket: "login-abad1.firebasestorage.app",
+            messagingSenderId: "5117210651",
+            appId: "1:5117210651:web:f76527eb00d42ba2bac8be",
+            measurementId: "G-JN5BLFMTK1"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // 3. DOM Elements
         const mainBtn = document.getElementById('mainBtn');
         const googleBtn = document.getElementById('googleBtn');
         const toggleMsg = document.getElementById('toggleMsg');
@@ -74,45 +96,64 @@
 
         let isLoginMode = true;
 
-        // 4. Toggle between Login and Sign-Up
+        // --- HELPER FUNCTIONS ---
+        const setLoading = (btn, isLoading) => {
+            if (isLoading) btn.classList.add('is-loading');
+            else btn.classList.remove('is-loading');
+            btn.disabled = isLoading;
+        };
+
+        const showError = (text) => {
+            message.textContent = text;
+            message.classList.add('error-active');
+            setTimeout(() => message.classList.remove('error-active'), 400); // Reset shake
+        };
+
+        // --- AUTH OBSERVER (REDIRECTION) ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Redirect to your dashboard page
+                window.location.assign("dashboard.html"); 
+            }
+        });
+
+        // --- EVENT LISTENERS ---
         toggleMsg.addEventListener('click', () => {
             isLoginMode = !isLoginMode;
             formTitle.textContent = isLoginMode ? "Login" : "Create Account";
-            mainBtn.textContent = isLoginMode ? "Sign In" : "Register";
+            mainBtn.querySelector('.btn-text').textContent = isLoginMode ? "Sign In" : "Register";
             toggleMsg.innerHTML = isLoginMode ? "Don't have an account? <b>Sign Up</b>" : "Already have an account? <b>Login</b>";
         });
 
-        // 5. Handle Email/Password (Login or Sign-Up)
         mainBtn.addEventListener('click', async () => {
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            message.textContent = ""; // Clear old errors
+            message.textContent = "";
+            message.classList.remove('error-active');
+            setLoading(mainBtn, true);
 
             try {
                 if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    alert("Logged in successfully!");
-                    alert("welcome to khokhoworld");
+                    await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
                 } else {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    alert("Account created successfully!");
+                    await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
                 }
             } catch (error) {
-                message.textContent = error.message;
+                showError(error.message);
+            } finally {
+                setLoading(mainBtn, false);
             }
         });
 
-        // 6. Handle Google Login
         googleBtn.addEventListener('click', async () => {
+            setLoading(googleBtn, true);
             try {
-                const result = await signInWithPopup(auth, provider);
-                alert("Google Login Success! Welcome " + result.user.displayName);
+                await signInWithPopup(auth, provider);
             } catch (error) {
-                message.textContent = error.message;
+                showError(error.message);
+            } finally {
+                setLoading(googleBtn, false);
             }
         });
     </script>
-
 </body>
-
 </html>
+
