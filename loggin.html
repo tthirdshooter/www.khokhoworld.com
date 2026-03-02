@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Auth Page</title>
+    <style>
+        /* Basic styling to make the login-card look good */
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f7f6; }
+        .login-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h2 id="formTitle">Login</h2>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        
+        <button id="mainBtn">Sign In</button>
+        
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        
+        <button id="googleBtn" style="background: white; color: #757575; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="margin-right: 10px;">
+            Continue with Google
+        </button>
+
+        <p id="toggleMsg" style="font-size: 0.8rem; margin-top: 15px; cursor: pointer; color: #4285f4;">
+            Don't have an account? <b>Sign Up</b>
+        </p>
+        <p id="message" style="color: red; font-size: 0.8rem;"></p>
+    </div>
+
+    <script type="module">
+        // 1. Import the functions you need from the SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signInWithPopup, 
+            GoogleAuthProvider 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // 2. YOUR CONFIG HERE 
+        // Replace the placeholders with your actual keys from the Firebase Console!
+        const firebaseConfig = {
+            apiKey: "AIzaSyBVFZ6EnTiIrDYzAVseMKpD3o7lQgZ1D3E",
+        authDomain: "login-abad1.firebaseapp.com",
+         projectId: "login-abad1",
+     storageBucket: "login-abad1.firebasestorage.app",
+  messagingSenderId: "5117210651",
+  appId: "1:5117210651:web:f76527eb00d42ba2bac8be",
+      measurementId: "G-JN5BLFMTK1"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // 3. DOM Elements
+        const mainBtn = document.getElementById('mainBtn');
+        const googleBtn = document.getElementById('googleBtn');
+        const toggleMsg = document.getElementById('toggleMsg');
+        const formTitle = document.getElementById('formTitle');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const message = document.getElementById('message');
+
+        let isLoginMode = true;
+
+        // 4. Toggle between Login and Sign-Up
+        toggleMsg.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            formTitle.textContent = isLoginMode ? "Login" : "Create Account";
+            mainBtn.textContent = isLoginMode ? "Sign In" : "Register";
+            toggleMsg.innerHTML = isLoginMode ? "Don't have an account? <b>Sign Up</b>" : "Already have an account? <b>Login</b>";
+        });
+
+        // 5. Handle Email/Password (Login or Sign-Up)
+        mainBtn.addEventListener('click', async () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            message.textContent = ""; // Clear old errors
+
+            try {
+                if (isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    alert("Logged in successfully!");
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    alert("Account created successfully!");
+                }
+            } catch (error) {
+                message.textContent = error.message;
+            }
+        });
+
+        // 6. Handle Google Login
+        googleBtn.addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                alert("Google Login Success! Welcome " + result.user.displayName);
+            } catch (error) {
+                message.textContent = error.message;
+            }
+        });
+    </script>
+
+</body>
+</html>
