@@ -22,7 +22,7 @@
         <input type="text" id="name" placeholder="Your Name" required>
         <input type="email" id="email" placeholder="Your Email" required>
         <textarea id="message" rows="4" placeholder="How can we help?" required></textarea>
-        <button type="submit" id="submitBtn">Submit to Firestore</button>
+        <button type="submit" id="submitBtn">Submit to KhoKhoworld</button>
     </form>
     <p id="status"></p>
 </div>
@@ -69,7 +69,7 @@
             });
 
             status.style.color = "green";
-            status.innerText = "Message saved in Firestore! ✅";
+            status.innerText = "Message saved in KhoKhoWorld! ✅";
             contactForm.reset();
         } catch (error) {
             console.error("Error adding document: ", error);
@@ -82,4 +82,5 @@
 </script>
 
 </body>
+
 </html>
