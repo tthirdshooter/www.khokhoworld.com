@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Kho-Kho Live Scoreboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --card-bg: #111111;
+            --accent-gold: #ffd700;
+            --team-red: #ff3e3e;
+            --team-blue: #00a8ff;
+            --foul-color: #ff8c00;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top Header */
+        .match-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            background: #000;
+            border-bottom: 4px solid var(--accent-gold);
+        }
+
+        .match-title { font-size: 2rem; color: var(--accent-gold); font-weight: 700; }
+        .turn-display { font-size: 1.8rem; background: #c0392b; padding: 5px 20px; border-radius: 5px; }
+
+        /* Main Grid */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 0.8fr 1fr;
+            gap: 20px;
+            flex: 1;
+            padding: 20px 40px;
+            align-items: center;
+        }
+
+        .team-card {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid #333;
+        }
+
+        .team-name { 
+            font-size: 4rem; 
+            margin: 0; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            border-bottom: 2px dashed #444;
+            display: inline-block;
+        }
+        .team-name:hover { color: var(--accent-gold); }
+
+        .score-val { font-family: 'Orbitron', sans-serif; font-size: 14rem; line-height: 0.9; margin: 20px 0; }
+        
+        /* Center Column */
+        .timer-val { font-family: 'Orbitron', sans-serif; font-size: 10rem; color: var(--accent-gold); text-align: center; }
+        .timer-low { color: #ff0000; animation: blink 0.8s infinite; }
+
+        @keyframes blink { 50% { opacity: 0.3; } }
+
+        /* Log / History Section */
+        .history-log {
+            height: 120px;
+            background: #000;
+            margin: 0 40px 10px;
+            border-radius: 10px;
+            padding: 10px;
+            overflow-y: auto;
+            border: 1px solid #222;
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #888;
+        }
+
+        /* Control Panel */
+        .operator-panel {
+            background: #1a1a1a;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-family: 'Rajdhani';
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #444;
+            color: white;
+        }
+
+        .btn-green { background: #27ae60 !important; }
+        .btn-red { background: #c0392b !important; }
+        .btn-horn { background: #f1c40f !important; color: black; }
+
+        .label-hint { font-size: 0.8rem; color: #666; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="match-info">
+        <div class="match-title">KHO-KHO CHAMPIONSHIP</div>
+        <div class="turn-display" id="turnText">1st INNING - SIDE A</div>
+    </div>
+
+    <div class="main-container">
+        <div class="team-card" style="border-top: 10px solid var(--team-red);">
+            <span class="label-hint">CLICK NAME TO EDIT</span>
+            <div class="team-name" id="nameA" onclick="editName('A')" style="color: var(--team-red);">TEAM RED</div>
+            <div class="score-val" id="scoreA">00</div>
+            <div style="font-size: 2rem; color: var(--foul-color);">FOULS: <span id="foulA">0</span></div>
+        </div>
+
+        <div class="center-col">
+            <div class="timer-val" id="timerDisplay">09:00</div>
+            <div style="text-align: center; color: #444; font-weight: bold;">TIME REMAINING</div>
+        </div>
+
+        <div class="team-card" style="border-top: 10px solid var(--team-blue);">
+            <span class="label-hint">CLICK NAME TO EDIT</span>
+            <div class="team-name" id="nameB" onclick="editName('B')" style="color: var(--team-blue);">TEAM BLUE</div>
+            <div class="score-val" id="scoreB">00</div>
+            <div style="font-size: 2rem; color: var(--foul-color);">FOULS: <span id="foulB">0</span></div>
+        </div>
+    </div>
+
+    <div class="history-log" id="matchLog">
+        [SYSTEM] Match Board Ready. Click team names to rename.
+    </div>
+
+    <div class="operator-panel">
+        <button onclick="updateScore('A', 1)">Red +1</button>
+        <button onclick="updateFoul('A', 1)">Red Foul</button>
+        <button class="btn-green" onclick="startTimer()">START</button>
+        <button class="btn-red" onclick="pauseTimer()">PAUSE</button>
+        <button class="btn-horn" onclick="playBuzzer(1000)">HORN</button>
+        <button onclick="resetTimer()">RESET</button>
+        <button onclick="nextTurn()">NEXT TURN</button>
+        <button onclick="updateFoul('B', 1)">Blue Foul</button>
+        <button onclick="updateScore('B', 1)">Blue +1</button>
+    </div>
+
+    <script>
+        let time = 540; 
+        let timerLoop = null;
+        let scores = { A: 0, B: 0 };
+        let fouls = { A: 0, B: 0 };
+        let turnIndex = 0;
+        const turnLabels = ["1st INNING (A)", "1st INNING (B)", "2nd INNING (A)", "2nd INNING (B)"];
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function editName(team) {
+            const newName = prompt("Enter Team Name:");
+            if (newName) {
+                document.getElementById('name' + team).innerText = newName.toUpperCase();
+                logAction(`Team ${team} renamed to ${newName.toUpperCase()}`);
+            }
+        }
+
+        function logAction(msg) {
+            const log = document.getElementById('matchLog');
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            log.innerHTML = `[${timeStr}] ${msg}<br>` + log.innerHTML;
+        }
+
+        function playBuzzer(duration) {
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(150, audioCtx.currentTime); 
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + (duration/1000));
+        }
+
+        function updateDisplay() {
+            let m = Math.floor(time / 60);
+            let s = time % 60;
+            document.getElementById('timerDisplay').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            document.getElementById('scoreA').innerText = scores.A.toString().padStart(2, '0');
+            document.getElementById('scoreB').innerText = scores.B.toString().padStart(2, '0');
+            document.getElementById('foulA').innerText = fouls.A;
+            document.getElementById('foulB').innerText = fouls.B;
+        }
+
+        function startTimer() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (!timerLoop) {
+                timerLoop = setInterval(() => {
+                    if (time > 0) { time--; updateDisplay(); }
+                    else { pauseTimer(); playBuzzer(2000); logAction("TIME EXPIRED"); }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() { clearInterval(timerLoop); timerLoop = null; }
+        function resetTimer() { pauseTimer(); time = 540; updateDisplay(); }
+
+        function updateScore(team, points) {
+            scores[team] += points;
+            const teamName = document.getElementById('name' + team).innerText;
+            logAction(`${teamName} SCORED! Total: ${scores[team]}`);
+            updateDisplay();
+        }
+
+        function updateFoul(team, points) {
+            fouls[team] += points;
+            const teamName = document.getElementById('name' + team).innerText;
+            logAction(`FOUL called on ${teamName}`);
+            updateDisplay();
+        }
+
+        function nextTurn() {
+            turnIndex = (turnIndex + 1) % 4;
+            document.getElementById('turnText').innerText = turnLabels[turnIndex];
+            logAction(`Switched to ${turnLabels[turnIndex]}`);
+            resetTimer();
+        }
+
+        updateDisplay();
+    </script>
+</body>
+</html>
