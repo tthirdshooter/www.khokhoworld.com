@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KHO-KHO PRO | Arena Dashboard</title>
+    <style>
+        :root {
+            --bg: #050810;
+            --card-bg: #111827;
+            --accent: #00f2ff; /* Neon Cyan */
+            --gold: #f59e0b;
+            --danger: #ff3e3e;
+            --success: #10b981;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px 20px 180px 20px; /* Space for the massive control dock */
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1100px; margin: auto; }
+
+        /* --- RULE OF THE DAY --- */
+        #dailyRuleBox {
+            background: linear-gradient(90deg, rgba(0,242,255,0.1) 0%, rgba(17,24,39,1) 100%);
+            border-left: 5px solid var(--accent);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn { from { transform: translateX(-100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        #dailyRuleBox h3 { color: var(--accent); margin: 0 0 10px 0; font-size: 0.8rem; letter-spacing: 3px; }
+        #dailyRuleText { font-size: 1.2rem; font-weight: 500; margin: 0; line-height: 1.4; }
+
+        /* --- HEADER & SEARCH --- */
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
+        h1 { font-size: 2.5rem; margin: 0; letter-spacing: -1px; text-transform: uppercase; }
+        h1 span { color: var(--accent); text-shadow: 0 0 15px rgba(0, 242, 255, 0.5); }
+
+        #ruleSearch {
+            background: var(--card-bg);
+            border: 1px solid #334155;
+            padding: 15px 25px;
+            border-radius: 50px;
+            color: white;
+            width: 100%;
+            max-width: 400px;
+            outline: none;
+            transition: 0.3s;
+        }
+        #ruleSearch:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
+
+        /* --- RULES GRID --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .rule-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #1f2937;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .rule-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+        .rule-content { color: var(--text-dim); line-height: 1.6; font-size: 0.95rem; flex-grow: 1; }
+        .rule-content strong { color: var(--text-main); }
+
+        /* --- CONTROL DOCK (Fixed at Bottom) --- */
+        .control-dock {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: #0a0f1d;
+            border-top: 2px solid var(--accent);
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            z-index: 1000;
+            box-shadow: 0 -15px 40px rgba(0,0,0,0.8);
+        }
+
+        /* Timer Section */
+        .timer-sec { text-align: center; }
+        #display { font-family: 'Courier New', monospace; font-size: 3.5rem; font-weight: 900; color: var(--accent); margin-bottom: 5px; }
+        .btn-group { display: flex; gap: 10px; }
+        button { 
+            padding: 10px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; 
+        }
+        .btn-start { background: var(--accent); color: #000; }
+        .btn-reset { background: #334155; color: #fff; }
+        button:active { transform: scale(0.9); }
+
+        /* Score Section */
+        .score-sec { display: flex; align-items: center; gap: 20px; background: #1e293b; padding: 15px 25px; border-radius: 12px; }
+        .score-box { text-align: center; }
+        .score-val { font-size: 2.5rem; font-weight: 900; color: var(--gold); }
+        .score-label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; }
+        .score-controls { display: flex; flex-direction: column; gap: 5px; }
+        .btn-score { padding: 5px 15px; font-size: 1.2rem; background: var(--accent); color: #000; }
+
+        .warning { color: var(--danger) !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 50% { opacity: 0.5; } }
+
+        @media (max-width: 768px) {
+            .control-dock { gap: 15px; padding: 10px 0; }
+            #display { font-size: 2.5rem; }
+            .score-sec { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="dailyRuleBox">
+        <h3>DAILY REFEREE INSIGHT</h3>
+        <p id="dailyRuleText">Select a rule to highlight...</p>
+    </div>
+
+    <header>
+        <h1>KHO-KHO <span>ARENA</span></h1>
+        <input type="text" id="ruleSearch" placeholder="Find a specific rule (e.g. 'foul', 'toss')...">
+    </header>
+
+    <div class="grid" id="ruleGrid">
+        <div class="rule-card">
+            <span class="tag">The Toss</span>
+            <p class="rule-content">No captain shall <strong>touch or pick up the coin</strong>. If they do, the Referee declares the opponent the winner of the toss immediately.</p>
+        </div>
+        <div class="rule-card">
+            <span class="tag">Decision</span>
+            <p class="rule-content">After choosing <strong>Defense or Attack</strong>, the captain cannot change his decision. Decision is final.</p>
+        </div>
+
+        <div class="rule-card">
+            <span class="tag">Attacker Positioning</span>
+            <p class="rule-content">Adjacent attackers must <strong>face opposite side lines</strong>. They cannot leave the block or change face without a KHO.</p>
+        </div>
+        <div class="rule-card">
+            <span class="tag">The Lane</span>
+            <p class="rule-content">An Attacker cannot cross the <strong>Central Lane</strong>. A foul occurs if the foot crosses both lines completely.</p>
+        </div>
+        <div class="rule-card">
+            <span class="tag">KHO Execution</span>
+            <p class="rule-content">Touching the sitter and shouting <strong>"KHO"</strong> must be simultaneous. Shouting before touching is a FOUL.</p>
+        </div>
+        <div class="rule-card">
+            <span class="tag">Direction</span>
+            <p class="rule-content">An attacker must follow the <strong>shoulder line</strong>. Turning more than 90° from the original direction is a Receding Foul.</p>
+        </div>
+
+        <div class="rule-card">
+            <span class="tag">Penalty: Blue Card</span>
+            <p class="rule-content"><strong>1-Minute Suspension</strong> for unnecessary standing or interchanging blocks. Replacement must enter immediately.</p>
+        </div>
+        <div class="rule-card">
+            <span class="tag">Penalty: Red Card</span>
+            <p class="rule-content">If a team has <strong>no substitutes</strong> and receives a Red Card or injury, the turn is closed immediately.</p>
+        </div>
+        <div class="rule-card">
+            <span class="tag">Misbehaviour</span>
+            <p class="rule-content"><strong>Pushing, pulling uniform, or hitting</strong> the defender is MISBEHAVIOUR and will be penalized.</p>
+        </div>
+
+        <div class="rule-card">
+            <span class="tag">Defense</span>
+            <p class="rule-content">A defender is <strong>OUT</strong> if touched legally, or if they step out of the field. Touching a sitter results in a warning.</p>
+        </div>
+    </div>
+</div>
+
+<div class="control-dock">
+    <div class="timer-sec">
+        <div id="display">09:00</div>
+        <div class="btn-group">
+            <button class="btn-start" id="startBtn">Start Turn</button>
+            <button class="btn-reset" id="resetBtn">Reset</button>
+        </div>
+    </div>
+
+    <div class="score-sec">
+        <div class="score-box">
+            <div class="score-label">Points</div>
+            <div id="scoreVal" class="score-val">00</div>
+        </div>
+        <div class="score-controls">
+            <button class="btn-score" onclick="updateScore(1)">+</button>
+            <button class="btn-score" style="background:#334155; color:#fff;" onclick="updateScore(-1)">-</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Rule of the Day Logic ---
+    const allRules = [
+        "The winner of the toss indicates choice by index finger.",
+        "An attacker can go out of court but must follow direction rules.",
+        "KHO cannot be given to an extended arm or leg.",
+        "Single action of touching without 'KHO' is a Foul.",
+        "Defender protection: No one is OUT if a foul is committed simultaneously."
+    ];
+    document.getElementById('dailyRuleText').innerText = allRules[Math.floor(Math.random() * allRules.length)];
+
+    // --- Search Logic ---
+    const search = document.getElementById('ruleSearch');
+    const cards = document.querySelectorAll('.rule-card');
+    search.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        cards.forEach(card => {
+            card.style.display = card.textContent.toLowerCase().includes(val) ? 'flex' : 'none';
+        });
+    });
+
+    // --- Timer Logic ---
+    let timeLeft = 9 * 60;
+    let timerId = null;
+    const startBtn = document.getElementById('startBtn');
+    const display = document.getElementById('display');
+
+    function updateTimerDisplay() {
+        let m = Math.floor(timeLeft / 60);
+        let s = timeLeft % 60;
+        display.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        if(timeLeft <= 60) display.classList.add('warning');
+        else display.classList.remove('warning');
+    }
+
+    startBtn.addEventListener('click', () => {
+        if(timerId) {
+            clearInterval(timerId);
+            timerId = null;
+            startBtn.innerText = "Resume";
+        } else {
+            startBtn.innerText = "Pause";
+            timerId = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if(timeLeft <= 0) {
+                    clearInterval(timerId);
+                    alert("TIME UP! *Blow Whistle*");
+                }
+            }, 1000);
+        }
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        clearInterval(timerId);
+        timerId = null;
+        timeLeft = 9 * 60;
+        updateTimerDisplay();
+        startBtn.innerText = "Start Turn";
+    });
+
+    // --- Score Counter Logic ---
+    let score = 0;
+    function updateScore(points) {
+        score += points;
+        if(score < 0) score = 0;
+        document.getElementById('scoreVal').innerText = score.toString().padStart(2, '0');
+    }
+</script>
+
+</body>
+</html>
