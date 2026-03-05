@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Match Rules & Regulations</title>
+    <style>
+        :root {
+            --primary-navy: #1a365d;
+            --secondary-blue: #2c5282;
+            --accent-gold: #c0a16b;
+            --light-gray: #f4f7f6;
+            --border-color: #e2e8f0;
+            --text-main: #2d3748;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--primary-navy);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-gold);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--secondary-blue);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: var(--primary-navy);
+            border-bottom: 2px solid var(--accent-gold);
+            display: inline-block;
+            margin-bottom: 25px;
+            padding-bottom: 5px;
+            font-size: 1.75rem;
+        }
+
+        .rule-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+
+        .rule-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .rule-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rule-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        .rule-list li::before {
+            content: "•";
+            color: var(--accent-gold);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .highlight-box {
+            background-color: #f0f4f8;
+            border-left: 5px solid var(--secondary-blue);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .point-badge {
+            display: inline-block;
+            background: var(--primary-navy);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-right: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-navy);
+            color: white;
+        }
+
+        /* Image styling */
+        .comparison-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: block;
+            margin: 0 auto;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Rule About Matches</h1>
+        <p>Official Tournament Regulations & Procedural Guidelines</p>
+    </header>
+
+    <nav>
+        <a href="#comparison">COMPARISON CHART</a>
+        <a href="#uniforms">UNIFORMS</a>
+        <a href="#gameplay">GAMEPLAY</a>
+        <a href="#entries">ENTRY RULES</a>
+        <a href="#scoring">SCORING</a>
+        <a href="#league">LEAGUE/KNOCKOUT</a>
+        <a href="#special">SPECIAL RULES</a>
+    </nav>
+
+    <div class="content">
+        <section id="comparison">
+            <h2>Format Comparison: Traditional vs. New International</h2>
+            <div class="rule-card">
+                <img src="image_0.png" alt="Kho Kho Format Comparison Chart" class="comparison-image">
+                <p style="font-size: 0.9rem; color: #718096; text-align: center; margin-top: 10px; font-style: italic;">Reference comparison chart from source image</p>
+            </div>
+        </section>
+
+        <section id="uniforms">
+            <h2>Player Attire & Identification</h2>
+            <div class="rule-card">
+                <ul class="rule-list">
+                    <li>All players must wear a uniform with numbers printed from 01 to 99 on both sides.</li>
+                    <li>T-shirt changes are strictly prohibited from the beginning until the end of the tournament.</li>
+                    <li>Captains or coaches must submit a record of T-shirt numbers for all substitutes.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="gameplay">
+            <h2>Defense & Batch Formation</h2>
+            <div class="grid-container">
+                <div class="rule-card">
+                    <h3>Batch Composition</h3>
+                    <ul class="rule-list">
+                        <li>Each batch consists of 03 defenders entering from the respective entry zone.</li>
+                        <li>The defending team may determine the order of the three batches at the start of the match.</li>
+                        <li>The entry order of batches cannot change during a particular turn.</li>
+                    </ul>
+                </div>
+                <div class="rule-card">
+                    <h3>Batch Transition</h3>
+                    <ul class="rule-list">
+                        <li>The next batch of 03 defenders must enter the field before two perfect KHOs are given after the last defender is out.</li>
+                        <li>Failure to enter within this time results in a "LATE ENTRY" out.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="entries">
+            <h2>Entry Violations (Rule 11 & 12)</h2>
+            <div class="highlight-box">
+                <p><strong>Wrong Batch Entry:</strong> If a defender enters out of turn, they are called back immediately, and 02 points are awarded to the attacking team as a late entry.</p>
+            </div>
+            <ul class="rule-list">
+                <li>If a "wrong batch" defender plays for more than 1 minute before notice, the attacker receives 02 points as a touch out.</li>
+                <li>In such cases, an additional 02 points are awarded as a penalty and recorded in the remarks.</li>
+                <li>The violating defender will not get another chance to defend during the rest of the play.</li>
+            </ul>
+        </section>
+
+        <section id="scoring">
+            <h2>Scoring System</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Points Awarded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Each defender declared "Out"</td>
+                        <td>02 Points (Attacker)</td>
+                    </tr>
+                    <tr>
+                        <td>Batch survives 03:00 minutes (Dream Run)</td>
+                        <td>01 Point (Defender)</td>
+                    </tr>
+                    <tr>
+                        <td>Every additional 01:00 minute of survival</td>
+                        <td>01 Point (Defender)</td>
+                    </tr>
+                    <tr>
+                        <td>Wrong Entry Penalty</td>
+                        <td>02 Additional Points (Attacker)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><small>*Note: Surviving defenders from the first inning do not have their time counted toward Dream Runs in the second inning.</small></p>
+        </section>
+
+        <section id="league">
+            <h2>League & Knockout Systems</h2>
+            <div class="grid-container">
+                <div class="rule-card">
+                    <h3>League Points</h3>
+                    <ul class="rule-list">
+                        <li><strong>Win:</strong> 03 Points</li>
+                        <li><strong>Tie:</strong> 02 Points</li>
+                        <li><strong>Loss:</strong> 00 Points</li>
+                    </ul>
+                </div>
+                <div class="rule-card">
+                    <h3>Minimum Chase (Rule 23)</h3>
+                    <ul class="rule-list">
+                        <li>The turn closes as soon as the 1st point is scored.</li>
+                        <li>The side taking the least time to score the 1st point is declared the winner.</li>
+                        <li>The defending team sends any 03 defenders.</li>
+                        <li>No Dream Run points are awarded during Minimum Chase.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="special">
+            <h2>Substitutions & Field Conditions</h2>
+            <ul class="rule-list">
+                <li><strong>Attacking Team:</strong> Allowed any number of substitutions during their attack.</li>
+                <li><strong>Defending Team:</strong> Allowed only before their defense turn, except for injury or Red Cards.</li>
+                <li><strong>Follow On:</strong> Optional if the lead is 12-16 points; Compulsory if the lead is 18 points.</li>
+                <li><strong>Floodlights:</strong> Must have a density of at least 250 lux or zero shadow.</li>
+                <li><strong>Soil:</strong> Natural soil fields require marking and watering twice (before start and between innings).</li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>Official Rules provided by the Referee Board & KKFI</p>
+        <p>&copy; 2026 Tournament Organizing Committee</p>
+    </footer>
+</div>
+
+</body>
+</html>
