@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Officials & Referee Duties</title>
+    <style>
+        :root {
+            --primary: #1a237e; /* Navy Blue */
+            --secondary: #ffd700; /* Gold */
+            --accent-red: #d32f2f;
+            --accent-blue: #1976d2;
+            --bg: #f4f7f6;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 850px) {
+            .container { grid-template-columns: 1fr; }
+        }
+
+        /* Official Count Sidebar */
+        .sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+        }
+
+        .official-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .official-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+        }
+
+        .official-count {
+            background: var(--primary);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content Cards */
+        .content section {
+            background: white;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+        }
+
+        h2 {
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 0;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+        }
+
+        /* Card Legends */
+        .card-ref {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: white;
+        }
+        .yellow-c { background: #fbc02d; color: black; }
+        .blue-c { background: #1976d2; }
+        .red-c { background: #d32f2f; }
+
+        .note-box {
+            background: #e8eaf6;
+            padding: 1rem;
+            border-radius: 5px;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Technical Officials Handbook</h1>
+    <p>Official Rules, Roles, and Responsibilities</p>
+</header>
+
+<div class="container">
+    
+    <main class="content">
+        <section id="referee">
+            <h2>Referee</h2>
+            <ul>
+                <li><strong>General Conduct:</strong> Responsible for the smooth conduct of the match. Manages score sheets, tosses, and synchronizes timing with the Time Keeper.</li>
+                <li><strong>Dispute Resolution:</strong> Holds final decision power in cases of differing opinions between officials.</li>
+                <li><strong>Penalties & Discipline:</strong>
+                    <ul>
+                        <li><span class="card-ref yellow-c">YELLOW CARD (Y)</span>: Recorded for intentional obstruction or misconduct.</li>
+                        <li><span class="card-ref blue-c">BLUE CARD (B)</span>: 1-minute suspension for repeated unnecessary standing in the block. Immediate substitution required.</li>
+                        <li><span class="card-ref red-c">RED CARD (F)</span>: Immediate removal from the arena. If shown to a defender, they are "OUT" and forbidden from the current and next match.</li>
+                    </ul>
+                </li>
+                <li><strong>Time Management:</strong> Solely responsible for time during additional innings/minimum chase.</li>
+            </ul>
+        </section>
+
+        <section id="umpire">
+            <h2>Umpire & Post Umpire</h2>
+            <ul>
+                <li><strong>Umpires:</strong> Move within the lobby, declare fouls, and compel attackers to follow rules. Can issue <span class="card-ref yellow-c">Y</span> cards for unfair play.</li>
+                <li><strong>Post Umpires:</strong> Positioned near the Post to provide real-time judgment and assist the Referee upon request.</li>
+            </ul>
+        </section>
+
+        <section id="timing">
+            <h2>Time Management Team</h2>
+            <ul>
+                <li><strong>Time Keeper:</strong> Signals start/end of turns with long whistles. Loudly announces each passing minute and shows the time indicator.</li>
+                <li><strong>Asst. Time Keeper:</strong> Monitors the stopwatch specifically for <em>"Dream Run"</em> purposes.</li>
+            </ul>
+        </section>
+
+        <section id="scoring">
+            <h2>Scoring Team</h2>
+            <ul>
+                <li><strong>Scorer 1:</strong> Records names, T-shirt numbers, and player performance. Prepares final results and collects all official signatures.</li>
+                <li><strong>Scorer 2 (Assistant):</strong> Tracks defender batches, records who put whom out, and manages the substitution (IN/OUT) process. Monitors 1-minute Blue Card suspensions.</li>
+            </ul>
+        </section>
+
+        <section id="dugout">
+            <h2>Dugout Officials</h2>
+            <ul>
+                <li>Maintain discipline in the team arena and control respective batches.</li>
+                <li>Authorized to show cards to players/coaches/managers for misconduct.</li>
+                <li>Ensure no defender enters the field in the wrong batch.</li>
+            </ul>
+            <div class="note-box">
+                <strong>Contingency:</strong> If an official is unable to continue, remaining officials manage the turn until a replacement is assigned.
+            </div>
+        </section>
+    </main>
+
+    <aside class="sidebar">
+        <h3>Official Count</h3>
+        <ul class="official-list">
+            <li>Referee <span class="official-count">01</span></li>
+            <li>Umpires <span class="official-count">02</span></li>
+            <li>Post Umpires <span class="official-count">02</span></li>
+            <li>Scorer <span class="official-count">01</span></li>
+            <li>Asst. Scorer <span class="official-count">01</span></li>
+            <li>Time Keepers <span class="official-count">02</span></li>
+            <li>Dugout Officials <span class="official-count">02</span></li>
+            <li>TV Umpires <span class="official-count">02</span></li>
+        </ul>
+        <p style="font-size: 0.8rem; color: #666; margin-top: 1rem;">
+            *TV Umpires applicable for International/Live TV reviews.
+        </p>
+    </aside>
+
+</div>
+
+</body>
+</html>
