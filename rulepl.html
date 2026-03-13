@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules: Players, Managers & Coaches</title>
+    <style>
+        :root {
+            --primary: #e65100; /* Deep Orange */
+            --dark: #263238; /* Charcoal */
+            --light-bg: #fdfdfd;
+            --accent-yellow: #ffd600;
+            --accent-blue: #2979ff;
+            --accent-red: #ff1744;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f0f2f5;
+            color: var(--dark);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 6px solid var(--primary);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: -40px auto 40px;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+
+        .section-num {
+            background: var(--primary);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-right: 15px;
+        }
+
+        /* Uniform Details */
+        .uniform-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #fff8f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px dashed var(--primary);
+        }
+
+        /* Penalties Dashboard */
+        .penalty-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .penalty-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #fafafa;
+            border-left: 5px solid #ccc;
+        }
+
+        .p-blue { border-left-color: var(--accent-blue); }
+        .p-yellow { border-left-color: var(--accent-yellow); }
+        .p-red { border-left-color: var(--accent-red); }
+
+        .card-icon {
+            width: 30px;
+            height: 45px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .warning-list {
+            background: #ffebee;
+            padding: 1.5rem;
+            border-radius: 8px;
+            list-style-type: '⚠️ ';
+        }
+
+        .warning-list li {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .uniform-grid { grid-template-columns: 1fr; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Code of Conduct & Regulations</h1>
+    <p>Players • Managers • Coaches</p>
+</header>
+
+<div class="container">
+    
+    <div class="card">
+        <h2><span class="section-num">12.1</span> Player Uniform</h2>
+        <p>All players must adhere to the standard kit requirements to be eligible for play.</p>
+        <div class="uniform-grid">
+            <div>
+                <strong>Apparel:</strong> Shorts & T-Shirt
+            </div>
+            <div>
+                <strong>Footwear:</strong> Mat Shoes (strictly no metal parts)
+            </div>
+            <div>
+                <strong>Lettering:</strong> Numbers on Front & Back in contrast color
+            </div>
+            <div>
+                <strong>Dimensions:</strong> 10cm Length x 2cm Width
+            </div>
+        </div>
+        <p style="color: var(--accent-red); font-weight: bold; margin-top: 15px;">
+            ※ Duplicate numbers within a team are strictly prohibited.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2><span class="section-num">12.2 / 12.3</span> Rights & Conduct</h2>
+        <p><strong>General Requirement:</strong> Every participant must know the rules of the game.</p>
+        
+        <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            <strong>Communication:</strong> Only the Coach or Captain may address the Referee.
+        </div>
+
+        <h3 style="font-size: 1.1rem;">Prohibited Acts (Punishable):</h3>
+        <ul class="warning-list">
+            <li>Directly addressing officials without authorization.</li>
+            <li>Making derogatory remarks or gestures.</li>
+            <li>Attempting to influence officials' decisions.</li>
+            <li>Leaving the play field without informing the referee during a match.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2><span class="section-num">12.4</span> Penalty System</h2>
+        <div class="penalty-box">
+            
+            <div class="penalty-item">
+                <div style="font-weight: bold;">Minor Offence:</div>
+                <div>Initial verbal warning by the Referee.</div>
+            </div>
+
+            <div class="penalty-item p-blue">
+                <div class="card-icon" style="background: var(--accent-blue);"></div>
+                <div><strong>Blue / Yellow Card:</strong> Issued for repetition of minor offences.</div>
+            </div>
+
+            <div class="penalty-item p-red">
+                <div class="card-icon" style="background: var(--accent-red);"></div>
+                <div><strong>Red Card:</strong> Issued for serious offences. Immediate disqualification from the match.</div>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 2rem;">Suspension Rules:</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <tr style="background: #eee; text-align: left;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Occurrence</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Penalty Outcome</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">2 Yellow Cards (Same Match)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Forbidden from current & next match.</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Yellow Card (2 Different Matches)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Forbidden from the next match.</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Red Card (Any Match)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Forbidden from current & next match.</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<footer>
+    Official Tournament Regulation Handbook &copy; 2026
+</footer>
+
+</body>
+</html>
