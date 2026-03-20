@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaurya International - Certificate System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        .wrapper { display: grid; grid-template-columns: 400px 1fr; gap: 20px; max-width: 1500px; margin: auto; }
+        .control-panel { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #8B3A3A; font-size: 1.2rem; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        .field { margin-bottom: 15px; }
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: #666; text-transform: uppercase; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .btn { border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; margin-top: 10px; }
+        .btn-download { background: #8B3A3A; color: white; }
+        .btn-bulk { background: #27ae60; color: white; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; background: #eee; padding: 5px; border-radius: 8px; }
+        .tab { flex: 1; border: none; padding: 8px; cursor: pointer; border-radius: 5px; font-weight: bold; color: #555; }
+        .tab.active { background: white; color: #8B3A3A; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        canvas { background: white; border: 1px solid #ccc; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        #status { margin-top: 10px; font-size: 13px; color: #d35400; font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="control-panel">
+        <h2>Control Center</h2>
+        
+        <div class="field">
+            <label>Serial Prefix & Counter</label>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="prefix" value="CBP/SIS/2026: " style="flex:2;">
+                <input type="number" id="counter" value="1" onchange="updatePreview()">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Organizer Name</label>
+            <input type="text" id="orgName" value="Dr. Swati Sharma" oninput="updatePreview()">
+        </div>
+
+        <div class="tabs">
+            <button id="tSingle" class="tab active" onclick="setMode('single')">Single</button>
+            <button id="tBulk" class="tab" onclick="setMode('bulk')">Bulk Excel</button>
+        </div>
+
+        <div id="singleMode">
+            <div class="field">
+                <label>Candidate Name</label>
+                <input type="text" id="singleName" placeholder="Type name here..." oninput="updatePreview()">
+            </div>
+            <button class="btn btn-download" onclick="downloadOne()">Download Certificate</button>
+        </div>
+
+        <div id="bulkMode" style="display:none;">
+            <div class="field">
+                <label>Upload Excel/CSV</label>
+                <input type="file" id="excelFile" accept=".xlsx, .xls, .csv">
+            </div>
+            <textarea id="nameList" placeholder="Names will appear here..." rows="8"></textarea>
+            <button class="btn btn-bulk" onclick="downloadAll()">Start Bulk Download</button>
+        </div>
+
+        <div id="status">Ready</div>
+    </div>
+
+    <div>
+        <canvas id="certCanvas" width="1414" height="1000"></canvas>
+    </div>
+</div>
+
+<div id="qrHidden" style="display:none;"></div>
+
+<script>
+    const canvas = document.getElementById('certCanvas');
+    const ctx = canvas.getContext('2d');
+    const template = new Image();
+    
+    // THE TEMPLATE IMAGE DATA (Your uploaded cer.jpg)
+    template.src = "https://i.ibb.co/LdnM2YvL/cer.jpg"; 
+
+    let mode = 'single';
+
+    // File Import
+    document.getElementById('excelFile').addEventListener('change', (e) => {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const wb = XLSX.read(evt.target.result, {type: 'binary'});
+            const names = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1}).flat().filter(n => n);
+            document.getElementById('nameList').value = names.join('\n');
+            document.getElementById('status').innerText = `Loaded ${names.length} names.`;
+        };
+        reader.readAsBinaryString(e.target.files[0]);
+    });
+
+    function setMode(m) {
+        mode = m;
+        document.getElementById('tSingle').classList.toggle('active', m === 'single');
+        document.getElementById('tBulk').classList.toggle('active', m === 'bulk');
+        document.getElementById('singleMode').style.display = m === 'single' ? 'block' : 'none';
+        document.getElementById('bulkMode').style.display = m === 'bulk' ? 'block' : 'none';
+        updatePreview();
+    }
+
+    function draw(name, serial, organizer) {
+        ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = "#1a1a1a";
+        
+        // 1. Serial Number
+        ctx.font = "bold 22px Arial";
+        ctx.textAlign = "left";
+        ctx.fillText(serial, 215, 75);
+
+        // 2. Recipient Name (Center)
+        ctx.font = "italic bold 40px 'Times New Roman', serif";
+        ctx.textAlign = "center";
+        ctx.fillText(name, 640, 442);
+
+        // 3. Organizer (Bottom)
+        ctx.font = "bold 24px Arial";
+        ctx.textAlign = "left";
+        ctx.fillText(organizer, 305, 815);
+        
+        // Auto-fill Dates from template context
+        ctx.font = "bold 22px Arial";
+        ctx.fillText("21-03-2026", 1180, 75);
+    }
+
+    function updatePreview() {
+        const name = mode === 'single' ? document.getElementById('singleName').value : "Sample Preview";
+        const serial = document.getElementById('prefix').value + document.getElementById('counter').value.toString().padStart(3, '0');
+        const org = document.getElementById('orgName').value;
+        draw(name || "Enter Name", serial, org);
+    }
+
+    function downloadOne() {
+        const name = document.getElementById('singleName').value;
+        if(!name) return alert("Enter a name!");
+        triggerDownload(name);
+    }
+
+    async function downloadAll() {
+        const names = document.getElementById('nameList').value.split('\n').filter(n => n.trim());
+        let count = parseInt(document.getElementById('counter').value);
+        const org = document.getElementById('orgName').value;
+
+        for(let name of names) {
+            const serial = document.getElementById('prefix').value + count.toString().padStart(3, '0');
+            document.getElementById('status').innerText = `Exporting: ${name}`;
+            draw(name.trim(), serial, org);
+            triggerDownload(name.trim());
+            await new Promise(r => setTimeout(r, 800)); 
+            count++;
+        }
+        document.getElementById('counter').value = count;
+        document.getElementById('status').innerText = "Bulk Export Done!";
+    }
+
+    function triggerDownload(name) {
+        const link = document.createElement('a');
+        link.download = `Certificate_${name.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+
+    template.onload = updatePreview;
+</script>
+</body>
+</html>
