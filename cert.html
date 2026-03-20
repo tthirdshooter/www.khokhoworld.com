@@ -3,61 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Certificate Generator - Shaurya International</title>
+    <title>Shaurya International - Pro Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 30px; }
         .container { display: flex; gap: 20px; max-width: 1200px; width: 100%; align-items: flex-start; }
         .form-container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); flex: 1; }
-        h2 { color: #8B3A3A; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 1.2rem; }
+        h2 { color: #8B3A3A; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 1.1rem; }
         .field { margin-bottom: 15px; }
-        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; color: #444; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        textarea { height: 120px; resize: none; font-family: inherit; }
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-gen { background: #8B3A3A; color: white; }
-        .btn-gen:hover { background: #6b2d2d; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: #666; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        textarea { height: 120px; resize: none; font-family: monospace; }
+        
+        /* Progress Bar Styles */
+        .progress-container { width: 100%; background-color: #e0e0e0; border-radius: 10px; margin: 15px 0; display: none; overflow: hidden; }
+        .progress-bar { width: 0%; height: 20px; background-color: #27ae60; transition: width 0.3s; text-align: center; color: white; font-size: 12px; line-height: 20px; }
+        
+        .btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        button { padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .btn-bulk { background: #27ae60; color: white; }
-        .btn-bulk:hover { background: #1e8449; }
-        .btn-dl { background: #444; color: white; }
-        canvas { border: 2px solid #ddd; max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 20px; }
-        .status-msg { margin-top: 10px; font-size: 13px; font-weight: bold; color: #d35400; text-align: center; }
+        .btn-single { background: #8B3A3A; color: white; }
+        .status-msg { font-size: 13px; font-weight: bold; color: #d35400; text-align: center; margin-top: 5px; }
+        canvas { border: 1px solid #ccc; max-width: 100%; height: auto; border-radius: 4px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="form-container">
-            <h2>Individual Mode</h2>
+            <h2>Settings & Preview</h2>
             <div class="field">
-                <label>Recipient Name (for Preview)</label>
-                <input type="text" id="userName" placeholder="Type name here..." oninput="generatePreview()">
+                <label>Prefix: <strong>CBP/SIS/2026:</strong></label>
+                <input type="number" id="counter" value="1" oninput="generatePreview()">
             </div>
-
-            <div style="display: flex; gap: 10px;">
-                <div class="field" style="flex: 2;">
-                    <label>Serial Prefix</label>
-                    <input type="text" id="prefix" value="CBP/SIS/2026: ">
-                </div>
-                <div class="field" style="flex: 1;">
-                    <label>Counter</label>
-                    <input type="number" id="counter" value="1" oninput="generatePreview()">
-                </div>
+            <div class="field">
+                <label>Single Recipient Preview</label>
+                <input type="text" id="userName" placeholder="Type name..." oninput="generatePreview()">
             </div>
-
             <div class="btn-group">
-                <button class="btn-gen" onclick="finalizeAndIncrement()">Confirm & Next</button>
-                <button class="btn-dl" onclick="downloadSingle()">Download PNG</button>
+                <button class="btn-single" onclick="downloadSingle()">Download This One</button>
             </div>
         </div>
 
         <div class="form-container">
-            <h2>Bulk Mode</h2>
+            <h2>Bulk Processing</h2>
             <div class="field">
-                <label>Paste Names (One per line)</label>
-                <textarea id="bulkNames" placeholder="Dr. Swati Sharma&#10;Mr. Rajesh Kumar&#10;Ms. Anjali Singh"></textarea>
+                <label>Paste List (One name per line)</label>
+                <textarea id="bulkNames" placeholder="Dr. Swati Sharma&#10;Mr. Amit Kumar..."></textarea>
             </div>
-            <button class="btn-bulk" onclick="processBulk()">Generate & Download All</button>
+            
+            <div class="progress-container" id="pParent">
+                <div class="progress-bar" id="pBar">0%</div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-bulk" id="bulkBtn" onclick="processBulk()">Generate All as ZIP</button>
+            </div>
             <div id="status" class="status-msg"></div>
         </div>
     </div>
@@ -68,99 +69,96 @@
         const canvas = document.getElementById('certCanvas');
         const ctx = canvas.getContext('2d');
         const img = new Image();
+        const prefix = "CBP/SIS/2026: ";
         
-        // Link to your template image
+        img.crossOrigin = "anonymous";
         img.src = 'https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/certificates.jpg'; 
 
-        img.onload = () => {
-            generatePreview(); 
-        };
+        img.onload = () => generatePreview();
 
         function toTitleCase(str) {
             return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         }
 
-        // Core drawing function to prevent overlapping
-        function drawCertificate(name, serial) {
+        function draw(name, count) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            const formattedName = toTitleCase(name);
-            ctx.fillStyle = "#1a1a1a";
             
-            // 1. Serial Number
+            ctx.fillStyle = "#1a1a1a";
+            const serial = prefix + count.toString().padStart(3, '0');
+
+            // Serial No
             ctx.font = "bold 22px Arial";
             ctx.textAlign = "left";
             ctx.fillText(serial, 215, 75);
 
-            // 2. Issue Date (Top Right)
-          //  ctx.fillText("21-03-2026", 1180, 75);
-
-            // 3. Name (Center)
-           ctx.font = "italic bold 40px 'Times New Roman', serif";
+            // Name
+            ctx.font = "italic bold 40px 'Times New Roman', serif";
             ctx.textAlign = "center";
-            ctx.fillText(formattedName || "Sample Name", 640, 442);
-
-            // 4. Session Date & Time
-         //   ctx.font = "bold 24px Arial";
-        //    ctx.textAlign = "";
-           ctx.fillText("", 260, 622);
-          ctx.fillText("", 495, 622);
-
-            // 5. Organizer
-           ctx.fillText("", 305, 815);
+            ctx.fillText(toTitleCase(name) || "Sample Name", 640, 442);
         }
 
         function generatePreview() {
             const name = document.getElementById('userName').value;
-            const prefix = document.getElementById('prefix').value;
             const count = document.getElementById('counter').value;
-            const serial = `${prefix}${count.toString().padStart(3, '0')}`;
-            drawCertificate(name, serial);
+            draw(name, count);
         }
 
         async function processBulk() {
             const names = document.getElementById('bulkNames').value.split('\n').filter(n => n.trim() !== '');
-            if (names.length === 0) return alert("Please paste some names first!");
+            if (names.length === 0) return alert("Please paste names first.");
 
-            const prefix = document.getElementById('prefix').value;
-            let currentCount = parseInt(document.getElementById('counter').value);
-            const statusDiv = document.getElementById('status');
+            const btn = document.getElementById('bulkBtn');
+            const pParent = document.getElementById('pParent');
+            const pBar = document.getElementById('pBar');
+            const status = document.getElementById('status');
+            const zip = new JSZip();
+            
+            let count = parseInt(document.getElementById('counter').value);
+            
+            // UI Update
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+            pParent.style.display = "block";
 
             for (let i = 0; i < names.length; i++) {
                 const name = names[i].trim();
-                const serial = `${prefix}${currentCount.toString().padStart(3, '0')}`;
+                draw(name, count);
                 
-                statusDiv.innerText = `Processing ${i + 1} of ${names.length}: ${name}`;
-                
-                drawCertificate(name, serial);
-                
-                // Trigger Download
-                const link = document.createElement('a');
-                link.download = `Cert_${currentCount}_${name.replace(/\s+/g, '_')}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                // Add to ZIP (this method is much more reliable than multiple popups)
+                const dataUrl = canvas.toDataURL('image/png').split(',')[1];
+                zip.file(`Cert_${count}_${name.replace(/\s+/g, '_')}.png`, dataUrl, {base64: true});
 
-                // Small delay to allow browser to handle multiple downloads
-                await new Promise(resolve => setTimeout(resolve, 800));
-                
-                currentCount++;
+                // Update Progress Bar
+                const percent = Math.round(((i + 1) / names.length) * 100);
+                pBar.style.width = percent + "%";
+                pBar.innerText = percent + "%";
+                status.innerText = `Adding ${i+1}/${names.length}: ${name}`;
+
+                await new Promise(r => setTimeout(r, 50)); // Tiny delay for UI smoothness
+                count++;
             }
 
-            document.getElementById('counter').value = currentCount;
-            statusDiv.innerText = "✅ All certificates downloaded successfully!";
-        }
+            status.innerText = "Creating ZIP file... please wait.";
+            
+            const content = await zip.generateAsync({type: "blob"});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = "Certificates_Shaurya_Batch.zip";
+            link.click();
 
-        function finalizeAndIncrement() {
-            const countInput = document.getElementById('counter');
-            countInput.value = parseInt(countInput.value) + 1;
-            generatePreview();
+            // Reset UI
+            document.getElementById('counter').value = count;
+            btn.disabled = false;
+            btn.innerText = "Generate All as ZIP";
+            status.innerText = "✅ Done! All certificates are in the ZIP folder.";
         }
 
         function downloadSingle() {
             const name = document.getElementById('userName').value || 'User';
+            const count = document.getElementById('counter').value;
             const link = document.createElement('a');
-            link.download = `Certificate_${name.replace(/\s+/g, '_')}.png`;
+            link.download = `Cert_${count}_${name}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
