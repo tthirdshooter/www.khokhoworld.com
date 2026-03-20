@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Generator - Shaurya International</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .controls { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; width: 400px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        input { width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #8B3A3A; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background: #6b2d2d; }
+        canvas { border: 5px solid #8B3A3A; max-width: 100%; height: auto; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .hint { font-size: 12px; color: #666; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h2>Certificate Creator</h2>
+        <div class="input-group">
+            <label>Recipient Name:</label>
+            <input type="text" id="userName" placeholder="e.g. Mr. John Doe">
+        </div>
+        <div class="input-group">
+            <label>Current Serial Counter:</label>
+            <input type="number" id="serialCounter" value="1">
+            <p class="hint">Increments automatically after generation.</p>
+        </div>
+        <button onclick="generateCertificate()">Generate & Update Counter</button>
+        <button onclick="downloadCert()" style="margin-top:10px; background: #444;">Download Image</button>
+    </div>
+
+    <img id="templateImg" src="https://i.imgur.com/vH9v5Zt.jpg" style="display:none;" crossorigin="anonymous">
+    
+    <canvas id="certificateCanvas" width="1414" height="1000"></canvas>
+
+    <script>
+        const canvas = document.getElementById('certificateCanvas');
+        const ctx = canvas.getContext('2d');
+        const img = document.getElementById('templateImg');
+        const serialInput = document.getElementById('serialCounter');
+
+        // Initial Draw when image loads
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+
+        function generateCertificate() {
+            const name = document.getElementById('userName').value;
+            let serial = serialInput.value;
+            
+            // Pad serial number (e.g., 001, 002)
+            let paddedSerial = serial.toString().padStart(3, '0');
+            let serialFull = `CBP/SIS/2026/${paddedSerial}`;
+
+            // 1. Redraw the base template to clear old text
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // 2. Set Text Styles
+            ctx.textAlign = "left";
+            ctx.fillStyle = "#000000";
+
+            // 3. Draw Serial Number
+            ctx.font = "bold 22px Arial";
+            ctx.fillText(serialFull, 215, 75);
+
+            // 4. Draw Recipient Name
+            ctx.font = "italic bold 35px serif";
+            ctx.textAlign = "center";
+            ctx.fillText(name, 665, 435);
+
+            // 5. Update Serial Counter for next time
+            serialInput.value = parseInt(serial) + 1;
+        }
+
+        function downloadCert() {
+            const link = document.createElement('a');
+            link.download = 'Certificate.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>
