@@ -3,85 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate Generator - Shaurya International</title>
+    <title>Shaurya International - Elite Certificate Gen</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .controls { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; width: 400px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
-        input { width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        button { background: #8B3A3A; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
-        button:hover { background: #6b2d2d; }
-        canvas { border: 5px solid #8B3A3A; max-width: 100%; height: auto; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .hint { font-size: 12px; color: #666; margin-top: 5px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eef2f7; display: flex; flex-direction: column; align-items: center; padding: 20px; color: #2c3e50; }
+        .main-wrapper { display: flex; gap: 20px; max-width: 1300px; width: 100%; flex-wrap: wrap; }
+        .sidebar { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); flex: 1; min-width: 380px; }
+        h2 { color: #8B3A3A; border-left: 5px solid #8B3A3A; padding-left: 10px; font-size: 1.1rem; margin: 20px 0 10px 0; }
+        .field { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 12px; text-transform: uppercase; color: #7f8c8d; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #dfe6e9; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        .btn-primary { background: #8B3A3A; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
+        .btn-secondary { background: #ecf0f1; color: #2c3e50; border: 1px solid #bdc3c7; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 5px; }
+        canvas { border: 10px solid white; max-width: 100%; height: auto; margin-top: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); border-radius: 4px; }
+        .upload-box { border: 2px dashed #bdc3c7; padding: 15px; text-align: center; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .upload-box:hover { border-color: #8B3A3A; background: #fff9f9; }
     </style>
 </head>
 <body>
 
-    <div class="controls">
-        <h2>Certificate Creator</h2>
-        <div class="input-group">
-            <label>Recipient Name:</label>
-            <input type="text" id="userName" placeholder="e.g. Mr. John Doe">
+<div class="main-wrapper">
+    <div class="sidebar">
+        <h2 style="margin-top:0;">1. Text Details</h2>
+        <div class="field">
+            <label>Serial Prefix & Counter</label>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="prefix" value="CBP/SIS/2026: " style="flex:2;">
+                <input type="number" id="counter" value="1" style="flex:1;">
+            </div>
         </div>
-        <div class="input-group">
-            <label>Current Serial Counter:</label>
-            <input type="number" id="serialCounter" value="1">
-            <p class="hint">Increments automatically after generation.</p>
+        <div class="field">
+            <label>Name Font Style</label>
+            <select id="fontStyle" onchange="previewFirst()">
+                <option value="bold italic 42px 'Times New Roman'">Classic Serif (Formal)</option>
+                <option value="42px 'Brush Script MT', cursive">Elegant Script (Calligraphy)</option>
+                <option value="bold 38px Arial">Modern Sans (Clean)</option>
+            </select>
         </div>
-        <button onclick="generateCertificate()">Generate & Update Counter</button>
-        <button onclick="downloadCert()" style="margin-top:10px; background: #444;">Download Image</button>
+
+        <h2>2. Signatures & Assets</h2>
+        <div class="field">
+            <label>Upload Principal Signature (PNG)</label>
+            <div class="upload-box" onclick="document.getElementById('sigInput').click()">
+                Click to add Signature
+                <input type="file" id="sigInput" accept="image/*" style="display:none;">
+            </div>
+        </div>
+
+        <h2>3. Bulk Import</h2>
+        <div class="field">
+            <label>Excel / CSV File</label>
+            <input type="file" id="fileUploader" accept=".xlsx, .xls, .csv">
+        </div>
+        <textarea id="bulkNames" placeholder="Names appear here..."></textarea>
+        
+        <button class="btn-primary" onclick="processBulk()">DOWNLOAD ALL CERTIFICATES</button>
+        <button class="btn-secondary" onclick="previewFirst()">Update Preview</button>
+        <div id="status" style="text-align:center; margin-top:10px; font-weight:bold; color:#e67e22;">Ready</div>
     </div>
 
-    <img id="templateImg" src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/cer.jpg" style="display:none;" crossorigin="anonymous">
-    
-    <canvas id="certificateCanvas" width="1414" height="1000"></canvas>
+    <div style="flex:2; display:flex; flex-direction:column; align-items:center;">
+        <canvas id="certCanvas" width="1414" height="1000"></canvas>
+    </div>
+</div>
 
-    <script>
-        const canvas = document.getElementById('certificateCanvas');
-        const ctx = canvas.getContext('2d');
-        const img = document.getElementById('templateImg');
-        const serialInput = document.getElementById('serialCounter');
+<img id="template" src="template.jpg" style="display:none;">
 
-        // Initial Draw when image loads
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        };
+<script>
+    const canvas = document.getElementById('certCanvas');
+    const ctx = canvas.getContext('2d');
+    const img = document.getElementById('template');
+    let signatureImg = null;
 
-        function generateCertificate() {
-            const name = document.getElementById('userName').value;
-            let serial = serialInput.value;
-            
-            // Pad serial number (e.g., 001, 002)
-            let paddedSerial = serial.toString().padStart(3, '0');
-            let serialFull = `CBP/SIS/2026/${paddedSerial}`;
-
-            // 1. Redraw the base template to clear old text
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            // 2. Set Text Styles
-            ctx.textAlign = "left";
-            ctx.fillStyle = "#000000";
-
-            // 3. Draw Serial Number
-            ctx.font = "bold 22px Arial";
-            ctx.fillText(serialFull, 215, 75);
-
-            // 4. Draw Recipient Name
-            ctx.font = "italic bold 35px serif";
-            ctx.textAlign = "center";
-            ctx.fillText(name, 665, 435);
-
-            // 5. Update Serial Counter for next time
-            serialInput.value = parseInt(serial) + 1;
+    // Load Signature
+    document.getElementById('sigInput').addEventListener('change', function(e) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            signatureImg = new Image();
+            signatureImg.onload = () => previewFirst();
+            signatureImg.src = event.target.result;
         }
+        reader.readAsDataURL(e.target.files[0]);
+    });
 
-        function downloadCert() {
+    // Load Excel
+    document.getElementById('fileUploader').addEventListener('change', function(e) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const names = XLSX.utils.sheet_to_json(sheet, { header: 1 }).flat().filter(n => n);
+            document.getElementById('bulkNames').value = names.join('\n');
+            document.getElementById('status').innerText = `Loaded ${names.length} names`;
+        };
+        reader.readAsBinaryString(e.target.files[0]);
+    });
+
+    function drawBase() {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        if (signatureImg) {
+            // Adjust position for 'Principal' line (Bottom Left area)
+            ctx.drawImage(signatureImg, 70, 850, 180, 80); 
+        }
+    }
+
+    function generateOnCanvas(name, serial) {
+        drawBase();
+        ctx.fillStyle = "#1a1a1a";
+        
+        // Serial
+        ctx.font = "bold 22px Arial";
+        ctx.textAlign = "left";
+        ctx.fillText(serial, 215, 75);
+
+        // Name
+        ctx.font = document.getElementById('fontStyle').value;
+        ctx.textAlign = "center";
+        ctx.fillText(name, 640, 442);
+        
+        // Fixed Date for this batch
+        ctx.font = "bold 22px Arial";
+        ctx.textAlign = "left";
+        ctx.fillText("21-03-2026", 1180, 75);
+    }
+
+    async function processBulk() {
+        const names = document.getElementById('bulkNames').value.split('\n').filter(n => n.trim());
+        let count = parseInt(document.getElementById('counter').value);
+        
+        for (let name of names) {
+            const serial = document.getElementById('prefix').value + count.toString().padStart(3, '0');
+            generateOnCanvas(name.trim(), serial);
+            
             const link = document.createElement('a');
-            link.download = 'Certificate.png';
+            link.download = `Cert_${count}_${name.trim()}.png`;
             link.href = canvas.toDataURL();
             link.click();
+            
+            await new Promise(r => setTimeout(r, 800)); // Delay for browser stability
+            count++;
         }
-    </script>
+        document.getElementById('counter').value = count;
+        document.getElementById('status').innerText = "Done!";
+    }
+
+    function previewFirst() {
+        const name = document.getElementById('bulkNames').value.split('\n')[0] || "Sample Name";
+        const serial = document.getElementById('prefix').value + document.getElementById('counter').value.padStart(3, '0');
+        generateOnCanvas(name, serial);
+    }
+
+    window.onload = () => setTimeout(drawBase, 500);
+</script>
 </body>
 </html>
