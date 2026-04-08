@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KhoKhoWorld | AI Athlete Lab & Movement Analysis</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@2.2.2/dist/posenet.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #ff6600;
+            --secondary: #1a1a1a;
+            --accent: #f4f4f4;
+            --text: #333;
+            --light-grey: #e0e0e0;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.8; margin: 0; color: var(--text); background-color: var(--accent); }
+        header { background: var(--secondary); color: white; padding: 2rem 1rem; text-align: center; border-bottom: 5px solid var(--primary); }
+        
+        nav { background: var(--primary); padding: 0.8rem 0; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 2000; }
+        nav ul { list-style: none; padding: 0; margin: 0; display: flex; justify-content: center; flex-wrap: wrap; }
+        nav li { position: relative; margin: 0 15px; }
+        nav a { color: white; text-decoration: none; font-weight: bold; padding: 10px 15px; display: block; }
+        nav a:hover { background-color: rgba(255, 255, 255, 0.2); border-radius: 5px; }
+
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 20px; }
+        .content-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        
+        /* Grid adapted for 3 tools */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; margin-top: 2rem; }
+        
+        .ai-card { border-top: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: space-between; }
+        
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid var(--light-grey); border-radius: 5px; box-sizing: border-box; }
+        
+        #chatBox { height: 200px; overflow-y: auto; background: #fdfdfd; border: 1px solid #eee; padding: 15px; border-radius: 5px; margin-bottom: 10px; font-size: 0.9rem; }
+        .bot-msg { color: var(--primary); font-weight: bold; margin-bottom: 10px; }
+        .user-msg { color: var(--secondary); margin-bottom: 10px; text-align: right; }
+
+        .button { display: inline-block; background: var(--primary); color: white; padding: 12px 24px; border-radius: 5px; text-decoration: none; border: none; cursor: pointer; font-weight: bold; width: 100%; text-align: center;}
+        .button:hover { opacity: 0.9; }
+        .button-secondary { background: var(--secondary); }
+
+        /* Movement Analysis Styles */
+        #video-container { position: relative; width: 100%; height: 300px; background: #000; border-radius: 5px; overflow: hidden; margin-bottom: 10px; display: none;}
+        #webcam { position: absolute; width: 100%; height: 100%; object-fit: cover; }
+        #output_canvas { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 10; }
+        #analysis-feedback { font-weight: bold; padding: 10px; border-radius: 5px; background: #eee; text-align: center; display: none;}
+
+        footer { text-align: center; padding: 2.5rem; background: var(--secondary); color: white; margin-top: 4rem; border-top: 5px solid var(--primary); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 class="hero-title">KhoKhoWorld</h1>
+    <p class="hero-subtitle">Optimize Your Game with Edge AI Video Analysis</p>
+</header>
+
+<nav>
+    <ul class="main-menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#ai-lab">AI Athlete Lab</a></li>
+        <li><a href="#">Leagues</a></li>
+        <li><a href="#">Contact Us</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    
+    <section class="content-card">
+        <h2>Welcome to the Next Generation of Training</h2>
+        <p>Kho Kho requires lightning reflexes and perfect form. <span class="highlight">KhoKhoWorld</span> provides <strong>real-time computer vision analysis</strong> directly in your browser. Analyze your pole dives, dodges, and sprints instantly using PoseNet technology.</p>
+    </section>
+
+    <h2 id="ai-lab" style="text-align:center; margin-top: 3rem; color: var(--secondary);">🚀 AI Athlete Performance Lab</h2>
+    <div class="grid">
+        
+        <div class="content-card ai-card" style="grid-column: span 1;">
+            <div>
+                <h3>🎥 Live Form Analyzer</h3>
+                <p style="font-size:0.9rem;">Analyze your posture. AI will detect your 'Ready Stance' and measure knee flex.</p>
+                
+                <div id="video-container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas id="output_canvas"></canvas>
+                </div>
+                <div id="analysis-feedback">Awaiting Analysis...</div>
+                <p id="loading-model" style="color: var(--primary); text-align:center;">Loading AI Model (PoseNet)... Please wait.</p>
+            </div>
+            
+            <div style="margin-top:10px; display: flex; gap: 5px;">
+                <button id="start-btn" class="button" onclick="toggleAnalysis()" disabled>Start Camera</button>
+                <button class="button button-secondary" onclick="runStanceCheck()">Check Stance</button>
+            </div>
+        </div>
+
+        <div class="content-card ai-card">
+            <div>
+                <h3>📊 Readiness Score</h3>
+                <p>Calculate your physical readiness for a match using our biometric algorithm.</p>
+                
+                <label>Sleep Last Night (Hours)</label>
+                <input type="number" id="sleep" placeholder="e.g. 7.5">
+                
+                <label>Resting Heart Rate (BPM)</label>
+                <input type="number" id="hr" placeholder="e.g. 62">
+                
+                <label>Muscle Soreness (1-10)</label>
+                <input type="range" id="sore" min="1" max="10" value="5">
+            </div>
+            
+            <div style="margin-top:10px;">
+                <button class="button" onclick="runRecoveryAI()">Calculate Status</button>
+                <div id="recoveryDisplay" style="margin-top: 15px; padding: 15px; border-radius: 5px; display: none; font-size: 0.9rem;"></div>
+            </div>
+        </div>
+
+        <div class="content-card ai-card">
+            <div>
+                <h3>🤖 Tactical Coach Bot</h3>
+                <p>Ask our AI about chain defense, pole dives, or training routines.</p>
+                
+                <div id="chatBox">
+                    <div class="bot-msg">Coach: KHO! Ready to improve your tactics? Ask me anything about diving or defense.</div>
+                </div>
+            </div>
+            
+            <div style="margin-top:10px; display: flex; gap: 5px;">
+                <input type="text" id="userQuery" placeholder="Ask about 'Chain Defense'..." style="margin:0;">
+                <button class="button" style="width: auto; padding: 10px 20px;" onclick="sendToBot()">Ask</button>
+            </div>
+        </div>
+
+    </div>
+    <section class="content-card" style="margin-top: 3rem;">
+        <h2>How Computer Vision Helps Kho Kho</h2>
+        <p>In Kho Kho, a millisecond makes the difference between a 'Kho' and a foul. Our **Live Form Analyzer** uses your device's camera to identify 17 key points on your body (shoulders, hips, knees, ankles). By calculating the angles between these points, the AI can provide instant feedback on whether your knees are sufficiently bent for a low dodge or if your back is straight during a sprint start.</p>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2026 KhoKhoWorld. Movement Analysis powered by TensorFlow.js PoseNet. | <a href="#" style="color: white;">Privacy Policy</a></p>
+</footer>
+
+<script>
+    // --- 1. MOVEMENT ANALYSIS LOGIC (TensorFlow.js) ---
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('output_canvas');
+    const ctx = canvas.getContext('2d');
+    const feedbackDiv = document.getElementById('analysis-feedback');
+    const startBtn = document.getElementById('start-btn');
+    const videoContainer = document.getElementById('video-container');
+    const loadingModel = document.getElementById('loading-model');
+
+    let net; // The PoseNet model
+    let isAnalyzing = false;
+    let latestPose = null; // Store the latest detected pose
+
+    // Load PoseNet model on startup
+    async function loadModel() {
+        try {
+            net = await posenet.load({
+                architecture: 'MobileNetV1',
+                outputStride: 16,
+                inputResolution: { width: 300, height: 300 },
+                multiplier: 0.75
+            });
+            loadingModel.style.display = 'none';
+            startBtn.disabled = false;
+            startBtn.innerText = "Start Live Analysis";
+            console.log("PoseNet Model Loaded.");
+        } catch (e) {
+            loadingModel.innerText = "Error loading model. Ensure you are on HTTPS.";
+            console.error(e);
+        }
+    }
+    loadModel();
+
+    async function toggleAnalysis() {
+        if (!isAnalyzing) {
+            // Start Camera and Analysis
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                video.srcObject = stream;
+                videoContainer.style.display = 'block';
+                feedbackDiv.style.display = 'block';
+                isAnalyzing = true;
+                startBtn.innerText = "Stop Camera";
+                startBtn.classList.add('button-secondary');
+                detectPose();
+            } catch (err) {
+                alert("Camera access denied or not available.");
+                console.error(err);
+            }
+        } else {
+            // Stop Camera
+            const stream = video.srcObject;
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+            }
+            videoContainer.style.display = 'none';
+            feedbackDiv.style.display = 'none';
+            isAnalyzing = false;
+            startBtn.innerText = "Start Live Analysis";
+            startBtn.classList.remove('button-secondary');
+        }
+    }
+
+    // Core pose detection loop
+    async function detectPose() {
+        if (!isAnalyzing) return;
+
+        // Ensure video is ready
+        if (video.readyState < 2) {
+            requestAnimationFrame(detectPose);
+            return;
+        }
+
+        // Set canvas dimensions to match video
+        if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+        }
+
+        // Detect pose
+        latestPose = await net.estimateSinglePose(video, {
+            flipHorizontal: false
+        });
+
+        // Draw skeletons on canvas
+        drawCanvas(latestPose);
+
+        // Continue loop
+        requestAnimationFrame(detectPose);
+    }
+
+    // Drawing helper (skeleton visualization)
+    function drawCanvas(pose) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw Keypoints
+        pose.keypoints.forEach(keypoint => {
+            if (keypoint.score > 0.6) { // Only draw confident points
+                const { y, x } = keypoint.position;
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = '#ff6600';
+                ctx.fill();
+            }
+        });
+
+        // Simplified skeleton logic (draw lines between adjacent points)
+        const adjacentKeyPoints = posenet.getAdjacentKeyPoints(pose.keypoints, 0.5);
+        adjacentKeyPoints.forEach(keypoints => {
+            ctx.beginPath();
+            ctx.moveTo(keypoints[0].position.x, keypoints[0].position.y);
+            ctx.lineTo(keypoints[1].position.x, keypoints[1].position.y);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#ffffff';
+            ctx.stroke();
+        });
+    }
+
+    // KHO KHO STANCE LOGIC (Analyze the current pose)
+    function runStanceCheck() {
+        if (!latestPose || !isAnalyzing) {
+            feedbackDiv.innerText = "Start camera and stand in view.";
+            feedbackDiv.style.background = "#eee";
+            feedbackDiv.style.color = "#333";
+            return;
+        }
+
+        // Get relevant points
+        const leftKnee = latestPose.keypoints.find(k => k.part === 'leftKnee');
+        const rightKnee = latestPose.keypoints.find(k => k.part === 'rightKnee');
+        const leftAnkle = latestPose.keypoints.find(k => k.part === 'leftAnkle');
+        const rightAnkle = latestPose.keypoints.find(k => k.part === 'rightAnkle');
+
+        // Verify confidence
+        if (leftKnee.score < 0.6 || rightKnee.score < 0.6) {
+            feedbackDiv.innerText = "Show your full body in the frame.";
+            feedbackDiv.style.background = "#fff3cd"; // Warning color
+            return;
+        }
+
+        // Stance Logic: A 'Ready Stance' means knees are significantly flexed (lower than ideal vertical extension)
+        // Check vertical distance between knee and ankle
+        const avgKneeY = (leftKnee.position.y + rightKnee.position.y) / 2;
+        const avgAnkleY = (leftAnkle.position.y + rightAnkle.position.y) / 2;
+        const kneeFlexionScore = avgAnkleY - avgKneeY;
+
+        // Analyze flexion (this logic requires calibration depending on camera distance)
+        if (kneeFlexionScore < 100) {
+            feedbackDiv.innerText = "POOR STANCE: Stand Low! Bend your knees more for agility.";
+            feedbackDiv.style.background = "#f8d7da"; // Danger color
+            feedbackDiv.style.color = "#721c24";
+        } else if (kneeFlexionScore < 180) {
+            feedbackDiv.innerText = "GOOD STANCE: Moderate bend. Good for defense.";
+            feedbackDiv.style.background = "#fff3cd"; // Warning color
+            feedbackDiv.style.color = "#856404";
+        } else {
+            feedbackDiv.innerText = "EXCELLENT STANCE: Deep bend! Perfect for explosive dodge.";
+            feedbackDiv.style.background = "#d4edda"; // Success color
+            feedbackDiv.style.color = "#155724";
+        }
+    }
+
+
+    // --- 2. RECOVERY AI LOGIC (EXISTING) ---
+    function runRecoveryAI() {
+        const sleep = parseFloat(document.getElementById('sleep').value);
+        const hr = parseFloat(document.getElementById('hr').value);
+        const sore = parseFloat(document.getElementById('sore').value);
+        const display = document.getElementById('recoveryDisplay');
+
+        if (isNaN(sleep) || isNaN(hr)) {
+            alert("Please fill in your sleep and heart rate data.");
+            return;
+        }
+
+        let score = (sleep * 10) - (hr * 0.4) - (sore * 6) + 40;
+        score = Math.min(Math.max(score, 0), 100);
+        
+        display.style.display = "block";
+        
+        if (score > 70) {
+            display.style.backgroundColor = "#d4edda";
+            display.style.color = "#155724";
+            display.innerHTML = `<strong>Ready to Play (${Math.round(score)}%)</strong><br>Condition: Optimal. Focus on explosive pole dives today!`;
+        } else if (score > 40) {
+            display.style.backgroundColor = "#fff3cd";
+            display.style.color = "#856404";
+            display.innerHTML = `<strong>Caution (${Math.round(score)}%)</strong><br>Condition: Moderate. Focus on tactical drills; avoid heavy sprinting.`;
+        } else {
+            display.style.backgroundColor = "#f8d7da";
+            display.style.color = "#721c24";
+            display.innerHTML = `<strong>Injury Risk (${Math.round(score)}%)</strong><br>Condition: Fatigued. We recommend active recovery (yoga) and rest today.`;
+        }
+    }
+
+    // --- 3. STRATEGY BOT LOGIC (EXISTING) ---
+    function sendToBot() {
+        const input = document.getElementById('userQuery');
+        const chatBox = document.getElementById('chatBox');
+        const query = input.value.toLowerCase();
+
+        if (query.trim() === "") return;
+
+        chatBox.innerHTML += `<div class="user-msg">You: ${input.value}</div>`;
+        
+        let response = "That's an interesting tactic. I recommend practicing your agility drills. Anything specific about defense or offense?";
+
+        if (query.includes("dive")) {
+            response = "For a successful Pole Dive, launch at a 45-degree angle. Practice your 'landing roll' to distribute impact safety.";
+        } else if (query.includes("chain")) {
+            response = "The 3-3-2 chain is standard. Timing your rectangle entry exactly when the chaser gives the 'Kho' is critical.";
+        } else if (query.includes("food")) {
+            response = "For Kho Kho, focus on complex carbohydrates 3 hours before a match and maintain electrolyte balance.";
+        } else if (query.includes("stance")) {
+            response = "The ideal 'Ready Stance' means a straight back, bent knees, and hands ready to move in any direction. Our Analyzer tool can check this!";
+        }
+
+        setTimeout(() => {
+            chatBox.innerHTML += `<div class="bot-msg">Coach: ${response}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 600);
+
+        input.value = "";
+    }
+</script>
+
+</body>
+</html>
