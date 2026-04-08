@@ -8,47 +8,154 @@
         :root {
             --primary: #ff6600;
             --secondary: #1a1a1a;
-            --accent: #f4f4f4;
+            --accent: #f8f9fa;
+            --white: #ffffff;
             --text: #333;
             --light-grey: #e0e0e0;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.8; margin: 0; color: var(--text); background-color: var(--accent); }
-        header { background: var(--secondary); color: white; padding: 2rem 1rem; text-align: center; border-bottom: 5px solid var(--primary); }
-        
-        /* Navigation Styles */
-        nav { background: var(--primary); padding: 0.8rem 0; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        nav ul { list-style: none; padding: 0; margin: 0; display: flex; justify-content: center; flex-wrap: wrap; }
-        nav li { position: relative; margin: 0 15px; }
-        nav a { color: white; text-decoration: none; font-weight: bold; padding: 10px 15px; display: block; }
-        nav a:hover { background-color: rgba(255, 255, 255, 0.2); border-radius: 5px; }
+        /* General Reset */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            color: var(--text); 
+            background-color: var(--accent); 
+        }
 
-        /* Submenu Logic */
-        .submenu { display: none; position: absolute; top: 100%; left: 0; min-width: 250px; background-color: #444; z-index: 1000; text-align: left; }
-        .submenu li { margin: 0; display: block; }
+        /* Header */
+        header { 
+            background: var(--secondary); 
+            color: var(--white); 
+            padding: 3rem 1rem; 
+            text-align: center; 
+            border-bottom: 5px solid var(--primary); 
+        }
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 1px; }
+        header p { margin: 10px 0 0; opacity: 0.8; font-size: 1.1rem; }
+
+        /* Navigation */
+        nav { 
+            background: var(--primary); 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+        }
+        nav ul { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+        }
+        nav li { position: relative; }
+        nav a { 
+            color: var(--white); 
+            text-decoration: none; 
+            font-weight: 600; 
+            padding: 1rem 1.5rem; 
+            display: block; 
+            transition: 0.3s;
+        }
+        nav a:hover { background-color: rgba(0, 0, 0, 0.1); }
+
+        /* Submenu */
+        .submenu { 
+            display: none; 
+            position: absolute; 
+            top: 100%; 
+            left: 0; 
+            min-width: 220px; 
+            background-color: #333; 
+            box-shadow: var(--shadow);
+        }
+        .submenu li { width: 100%; }
+        .submenu a { padding: 0.8rem 1rem; font-size: 0.9rem; border-bottom: 1px solid #444; }
         .has-submenu:hover .submenu { display: block; }
 
-        /* Other Styles */
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 20px; }
-        .content-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 2rem; }
-        .feature-box { background: var(--secondary); color: white; padding: 1.5rem; border-radius: 8px; text-align: center; }
-        .feature-box img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; }
-        .button { display: inline-block; background: var(--primary); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px; }
-        footer { text-align: center; padding: 2.5rem; background: var(--secondary); color: white; margin-top: 4rem; border-top: 5px solid var(--primary); }
+        /* Main Container */
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 20px; }
+
+        /* Cards */
+        .content-card { 
+            background: var(--white); 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            box-shadow: var(--shadow); 
+            margin-bottom: 2rem;
+        }
+        .highlight { color: var(--primary); font-weight: bold; }
+
+        /* Grid System */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+            margin: 2rem 0; 
+        }
+
+        .feature-box { 
+            background: var(--secondary); 
+            color: var(--white); 
+            border-radius: 12px; 
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+        .feature-box:hover { transform: translateY(-5px); }
+        .feature-box img { width: 100%; height: 200px; object-fit: cover; }
+        .feature-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .feature-box h3 { margin-top: 0; color: var(--primary); }
+        .feature-box p { font-size: 0.95rem; opacity: 0.9; flex-grow: 1; }
+
+        /* Buttons */
+        .button { 
+            display: inline-block; 
+            background: var(--primary); 
+            color: var(--white); 
+            padding: 12px 24px; 
+            border-radius: 6px; 
+            text-decoration: none; 
+            font-weight: bold;
+            text-align: center;
+            transition: background 0.3s;
+        }
+        .button:hover { background: #e65c00; }
+
+        /* Footer */
+        footer { 
+            text-align: center; 
+            padding: 3rem 1rem; 
+            background: var(--secondary); 
+            color: var(--white); 
+            margin-top: 4rem; 
+            border-top: 5px solid var(--primary); 
+        }
+        footer a { color: var(--primary); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul { flex-direction: column; }
+            .submenu { position: static; width: 100%; }
+            header h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 class="hero-title">KhoKhoWorld</h1>
-    <p class="hero-subtitle">Leagues, Players, & Updates</p>
+    <h1>KhoKhoWorld</h1>
+    <p>The Ultimate Hub for Leagues, Players, & Live Updates</p>
 </header>
 
 <nav>
     <ul class="main-menu">
         <li><a href="index.html">Home</a></li>
         <li><a href="league.html">Leagues</a></li>
+<li><a href="athleteai.html">Fitness Tools for KhoKho</a></li>
         <li><a href="players.html">Players</a></li>
         <li class="has-submenu">
             <a href="#">Rules & Regulation ▼</a>
@@ -56,79 +163,88 @@
                 <li><a href="aboutground.html">About Ground</a></li>
                 <li><a href="rr.html">Rule of the Game</a></li>
                 <li><a href="ruleofmatch.html">Rule About Matches</a></li>
-                <li><a href="rd.html">Technical Officials / Refree's Duties</a></li>
-             <li><a href="rulepl.html">Rules About Players / Managers / Coaches</a></li>   
-               <li><a href="scoring.html">Scoring In Kho-Kho</a></li> 
-                <li><a href="#">Signals In Kho-Kho</a></li>
-                <li><a href="#">Some Important Points</a></li>
+                <li><a href="rd.html">Technical Officials</a></li>
+                <li><a href="rulepl.html">Rules for Players/Coaches</a></li>   
+                <li><a href="scoring.html">Scoring System</a></li> 
             </ul>
         </li>
         <li><a href="news.html">News</a></li>
         <li><a href="contact.html">Contact Us</a></li>
-        <li><a href='athleteai.html>AI for AThletes Fitness</li>
     </ul>
 </nav>
 
 <div class="container">
-   
+    
     <section class="content-card">
         <h2>Welcome to the Arena</h2>
         <p>
-            <span class="highlight">KhoKhoWorld</span> is your complete destination — From major leagues, 
-            <strong>Kho Kho World Cup</strong>, and breaking news to legendary players, rising talents, 
-            Kho Kho rules, and the history of the sport.
+            <span class="highlight">KhoKhoWorld</span> is your complete destination for everything related to this high-speed sport. 
+            From the <strong>Kho Kho World Cup</strong> and major domestic leagues like Ultimate Kho Kho (UKK), 
+            to breaking news, legendary player profiles, and rising talents.
         </p>
         <p>
-           If you are following professional Kho Kho leagues in India, you will find 
-            accurate, in-depth coverage all in one place.
+            Stay updated with accurate, in-depth coverage and master the strategic nuances of the game all in one place.
         </p>
     </section>
-    <h2 class="section-title">Explore Kho Kho</h2>
+
+    <h2 style="text-align: center; margin-top: 3rem;">Explore Kho Kho</h2>
+    
     <div class="grid">
+        <!-- Card 1 -->
         <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/toss.jpg" alt="toss">
-            <h3> Major Leagues</h3>
-            <p>Dive into the intensity of Ultimate Kho Kho (UKK) and other top domestic championships. Get real-time scores, team stats, and expert analysis.</p>
-           <a href="league.html" class="button">View Leagues</a>
+            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/toss.jpg" alt="Leagues">
+            <div class="feature-content">
+                <h3>Major Leagues</h3>
+                <p>Dive into the intensity of Ultimate Kho Kho (UKK) and top domestic championships with real-time stats.</p>
+                <a href="league.html" class="button">View Leagues</a>
+            </div>
         </div>
+
+        <!-- Card 2 -->
         <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/ukk.jpg" alt="ukk">
-            <h3>Kho Kho World Cup</h3>
-            <p>Follow the pinnacle of international Kho Kho. Access historical data, tournament brackets, team profiles, and exclusive match highlights.</p>
-            <a href="worldcup.html" class="button">World Cup Data</a>
+            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/ukk.jpg" alt="World Cup">
+            <div class="feature-content">
+                <h3>Kho Kho World Cup</h3>
+                <p>Follow the pinnacle of international competition. Access historical data and match highlights.</p>
+                <a href="worldcup.html" class="button">World Cup Data</a>
+            </div>
         </div>
+
+        <!-- Card 3 -->
         <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/kho.jpg" alt="kho">
-            <h3> Legendary Players</h3>
-            <p>Discover the heroes of Kho Kho! Explore detailed player profiles, career statistics, and memorable moments from the legends and rising stars.</p>
-            <a href="players.html" class="button">Meet Players</a>
+            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/kho.jpg" alt="Players">
+            <div class="feature-content">
+                <h3>Legendary Players</h3>
+                <p>Meet the heroes! Explore detailed player profiles, career statistics, and memorable moments.</p>
+                <a href="players.html" class="button">Meet Players</a>
+            </div>
         </div>
+
+        <!-- Card 4 -->
         <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/history.jpg" alt="history">
-            <h3>Rules & History</h3>
-            <p>Master the strategic nuances of Kho Kho with our comprehensive guide to official rules, and journey through the rich history of this ancient sport.</p>
-            <a href="rule.html" class="button">Learn More</a>
-        </div>
-   <div class="feature-box">
-            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/cmn.jpg" alt="cmn">
-            <h3>Common Wealth Championship</h3>
-            <p>16 Nations one CUP Coming Soon.</p>
-            <a href="rules.html" class="button">Learn More</a>
+            <img src="https://raw.githubusercontent.com/tthirdshooter/www.khokhoworld.com/main/image/history.jpg" alt="History">
+            <div class="feature-content">
+                <h3>Rules & History</h3>
+                <p>Master the strategic nuances with our comprehensive guide to official rules and history.</p>
+                <a href="rule.html" class="button">Learn More</a>
+            </div>
         </div>
     </div>
-    <section class="content-card" style="margin-top: 3rem;">
+
+    <section class="content-card" style="text-align: center;">
         <h2>Latest News & Updates</h2>
-        <p>Stay on top of all the action with our breaking news section. From transfer rumors to match reports, KhoKhoWorld keeps you informed.</p>
-        <p>
-            <a href="news.html" class="button" style="background-color: var(--secondary);">Read All News</a>
-        </p>
+        <p>Stay on top of all the action with our breaking news section. From transfer rumors to match reports.</p>
+        <a href="news.html" class="button" style="background-color: var(--secondary);">Read All News</a>
     </section>
 </div>
-<footer>
-    <p>&copy; 2026 KhoKhoWorld. All Rights Reserved. our partners wwww.khokhoindia.com,www.khokhoasia.com,www.khokhobharat.com,www.internationalkhokho.com| <a href="#" style="color: white;">Privacy Policy</a></p>
-</footer>
-</body>
-</html>
-</body>
-</html>
 
+<footer>
+    <p>&copy; 2026 <strong>KhoKhoWorld</strong>. All Rights Reserved.</p>
+    <p style="font-size: 0.8rem; opacity: 0.7;">
+        Partners: khokhoindia.com | khokhoasia.com | khokhobharat.com | internationalkhokho.com
+    </p>
+    <p><a href="#">Privacy Policy</a></p>
+</footer>
+
+</body>
+</html>
