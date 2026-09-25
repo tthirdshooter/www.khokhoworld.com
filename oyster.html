@@ -14,10 +14,17 @@
         }
         :root {
             --primary: #d4af37; /* Soft Gold */
+            --primary-hover: #b8962d;
             --dark: #111111;
             --light-bg: #fdfbf7; /* Off-white pearl */
             --text: #333333;
             --white: #ffffff;
+            --whatsapp-color: #25d366;
+            --whatsapp-hover: #1da851;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -98,9 +105,19 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
+            display: inline-block;
+            text-align: center;
         }
         .btn:hover {
-            background-color: #b8962d;
+            background-color: var(--primary-hover);
+        }
+        
+        .btn-whatsapp {
+            background-color: var(--whatsapp-color);
+            margin-top: 0.5rem;
+        }
+        .btn-whatsapp:hover {
+            background-color: var(--whatsapp-hover);
         }
 
         /* Services Section */
@@ -170,7 +187,12 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .booking button {
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .booking button, .booking a.btn {
             width: 100%;
         }
 
@@ -186,7 +208,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-links {
-                display: none; /* Can be expanded with JS for mobile menu */
+                display: none;
             }
             .hero h1 {
                 font-size: 2rem;
@@ -240,10 +262,14 @@
     <!-- Appointment Booking Form -->
     <section class="booking" id="book">
         <h2>Book an Appointment</h2>
-        <form action="#" method="POST">
+        <form id="bookingForm">
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" required placeholder="Jane Doe">
+            </div>
+            <div class="form-group">
+                <label for="phone">Mobile Phone Number</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+1 363-333-0308">
             </div>
             <div class="form-group">
                 <label for="email">Email Address</label>
@@ -253,25 +279,77 @@
                 <label for="service">Select Service</label>
                 <select id="service" name="service" required>
                     <option value="">-- Choose a Service --</option>
-                    <option value="hair">Hair Styling & Care</option>
-                    <option value="facial">Skin & Facials</option>
-                    <option value="nails">Nail Care</option>
-                    <option value="makeup">Bridal & Makeup</option>
+                    <option value="Hair Styling & Care">Hair Styling & Care</option>
+                    <option value="Skin & Facials">Skin & Facials</option>
+                    <option value="Nail Care">Nail Care</option>
+                    <option value="Bridal & Event Makeup">Bridal & Event Makeup</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="date">Preferred Date</label>
                 <input type="date" id="date" name="date" required>
             </div>
-            <button type="submit" class="btn">Confirm Booking</button>
+            <div class="button-group">
+                <button type="submit" class="btn btn-whatsapp">Send Booking via WhatsApp</button>
+                <button type="button" id="smsBtn" class="btn">Send Booking via SMS</button>
+            </div>
         </form>
     </section>
 
     <!-- Footer -->
     <footer id="contact">
         <p>&copy; 2026 Oyster Beauty Lounge. All Rights Reserved.</p>
-        <p>123 Luxury Boulevard, Suite 100 | Contact: +1 (555) 019-2834</p>
+        <p>1260 old country road , Westbury, NY 11590 | Contact: +1 363-333-0308</p>
     </footer>
 
+    <script>
+        // Business mobile phone number in international format (without spaces/dashes)
+        const businessPhone = "13633330308"; 
+
+        const bookingForm = document.getElementById('bookingForm');
+        const smsBtn = document.getElementById('smsBtn');
+
+        // Function to construct booking message content
+        function generateBookingMessage() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const serviceSelect = document.getElementById('service');
+            const service = serviceSelect.options[serviceSelect.selectedIndex].text;
+            const date = document.getElementById('date').value;
+
+            return `Hello Oyster Beauty Lounge! I would like to book an appointment:\n\n` +
+                   `• Name: ${name}\n` +
+                   `• Phone: ${phone}\n` +
+                   `• Email: ${email}\n` +
+                   `• Service: ${service}\n` +
+                   `• Date: ${date}`;
+        }
+
+        // Method 1: Send via WhatsApp
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const message = generateBookingMessage();
+            const whatsappUrl = `https://wa.me/${businessPhone}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // Method 2: Send via Mobile SMS
+        smsBtn.addEventListener('click', function() {
+            if (!bookingForm.checkValidity()) {
+                bookingForm.reportValidity();
+                return;
+            }
+            const message = generateBookingMessage();
+            
+            // iOS uses '&body=', Android uses '?body='
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const separator = isIOS ? '&' : '?';
+            const smsUrl = `sms:${businessPhone}${separator}body=${encodeURIComponent(message)}`;
+            
+            window.location.href = smsUrl;
+        });
+    </script>
 </body>
 </html>
